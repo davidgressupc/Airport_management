@@ -1,1 +1,1 @@
-Versió 1. David Gress
+Versió 1. David Gress, Judit Salvadó, Oriol Julià
