@@ -143,39 +143,46 @@ def PlotAirports(airports):
 
 def MapAirports(airports):
     """Crea un mapa KML per Google Earth (aeroports colorejats)"""
+
     if not airports:
-        print(" No hi ha aeroports per mostrar")
-        return
+        print("No hi ha aeroports per mostrar")
+        return None
 
     try:
         import simplekml
+        import os
     except ImportError:
-        print(" simplekml no instal·lat. Executa: pip install simplekml")
-        return
+        print("simplekml no instal·lat. Executa: pip install simplekml")
+        return None
 
     kml = simplekml.Kml()
 
-    # Afegim cada aeroport
     i = 0
-    while i < len(airports):  # Converted for loop to while
+    while i < len(airports):
         airport = airports[i]
-        # Aeroports Schengen = VERD
+
+        point = kml.newpoint(
+            name=airport.icao_code,
+            description=(
+                f"Schengen: {'SI' if airport.schengen else 'NO'}\n"
+                f"Lat: {airport.latitude}\n"
+                f"Lon: {airport.longitude}"
+            ),
+            coords=[(airport.longitude, airport.latitude)]
+        )
+
         if airport.schengen:
-            point = kml.newpoint(
-                name=airport.icao_code,
-                description=f"Schengen: SI\nLat: {airport.latitude}\nLon: {airport.longitude}",
-                coords=[(airport.longitude, airport.latitude)]
-            )
             point.style.iconstyle.color = simplekml.Color.green
-        # No Schengen = VERMELL
         else:
-            point = kml.newpoint(
-                name=airport.icao_code,
-                description=f"Schengen: NO\nLat: {airport.latitude}\nLon: {airport.longitude}",
-                coords=[(airport.longitude, airport.latitude)]
-            )
             point.style.iconstyle.color = simplekml.Color.red
+
         i += 1
 
-    kml.save("airports_map.kml")
-    print("Mapa guardat: 'airports_map.kml' (Obrir amb Google Earth)")
+    base_dir = os.path.dirname(__file__)
+    filepath = os.path.join(base_dir, "airports_map.kml")
+
+    kml.save(filepath)
+
+    print(f"Mapa guardat: {filepath} (Obrir amb Google Earth)")
+
+    return filepath

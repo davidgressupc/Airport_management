@@ -11,14 +11,17 @@ airports = []
 # ===== FUNCIONES PARA BOTONES (USANDO SOLO airport.py) =====
 
 def load_airports_from_file():
-    """Cargar aeroports desde fichero - USA: LoadAirports()"""
+    """Cargar aeroports desde fichero del proyecto"""
     global airports
-    filename = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
-    if filename:
-        airports = LoadAirports(filename)
-        messagebox.showinfo("Éxito", f"✓ Carregats {len(airports)} aeroports")
+
+    filename = "airports_file.txt"
+
+    airports = LoadAirports(filename)
+
+    if airports:
+        messagebox.showinfo("Éxito", f"{len(airports)} aeroports carregats")
     else:
-        messagebox.showerror("Error", "No file selected")
+        messagebox.showerror("Error", f"No s'ha trobat el fitxer: {filename}")
 
 
 def add_airport_manual():
@@ -30,7 +33,7 @@ def add_airport_manual():
         lon = float(entry_lon.get())
 
         if not code_entry:
-            messagebox.showerror("Error", "Codi ICAO requerido")
+            messagebox.showerror("Error", "Codi ICAO requerit")
             return
 
         new_airport = Airport(code_entry, lat, lon)
@@ -41,12 +44,14 @@ def add_airport_manual():
             return
 
         if AddAirport(airports, new_airport):
-            messagebox.showinfo("Éxito", f"✓ Aeroport {code_entry} afegit")
+            messagebox.showinfo("Éxit", f"Aeroport {code_entry} afegit")
             entry_code.delete(0, tk.END)
             entry_lat.delete(0, tk.END)
             entry_lon.delete(0, tk.END)
+            show_plot_schengen()  # actualizar gráfica
+
         else:
-            messagebox.showwarning("Aviso", f"L'aeroport {code_entry} ja existeix")
+            messagebox.showwarning("Avis", f"L'aeroport {code_entry} ja existeix")
     except ValueError:
         messagebox.showerror("Error", "Latitud i Longitud han de ser nombres")
 
@@ -60,8 +65,9 @@ def delete_airport_action():
         return
 
     if RemoveAirport(airports, code) == 0:
-        messagebox.showinfo("Éxito", f"✓ Aeroport {code} eliminat")
+        messagebox.showinfo("Éxit", f"Aeroport {code} eliminat")
         entry_search.delete(0, tk.END)
+        show_plot_schengen()  # actualizar gráfica
     else:
         messagebox.showerror("Error", f"Aeroport {code} no trobat")
 
@@ -74,11 +80,14 @@ def show_airport_data():
         messagebox.showerror("Error", "Introdueix codi ICAO")
         return
 
-    for a in airports: #cambiar
+    i = 0
+    while i < len(airports):
+        a = airports[i]
         if a.icao_code.upper() == code.upper():
             info = f"Codi: {a.icao_code}\nLatitud: {a.latitude:.4f}\nLongitud: {a.longitude:.4f}\nSchengen: {'Sí' if a.schengen else 'No'}"
             messagebox.showinfo("Dades de l'aeroport", info)
             return
+        i += 1
 
     messagebox.showerror("Error", f"Aeroport {code} no trobat")
 
@@ -105,15 +114,21 @@ def show_plot_schengen():
 
 
 def show_google_earth_map():
-    """Generar mapa KML para Google Earth - USA: MapAirports()"""
     global airports
     if not airports:
         messagebox.showerror("Error", "No hi ha aeroports carregats")
         return
 
-    MapAirports(airports)
-    messagebox.showinfo("Éxito", "✓ Mapa guardat: airports_map.kml\n(Obrir amb Google Earth Pro)")
+    filepath = MapAirports(airports)
 
+    if filepath is None:
+        messagebox.showerror("Error", "No s'ha pogut generar el mapa")
+        return
+
+    import os
+    os.startfile(filepath)
+
+    messagebox.showinfo("Éxito", f"Mapa obert:\n{filepath}")
 
 def save_schengen_airports():
     """Guardar aeroports Schengen en fichero - USA: SaveSchengenAirports()"""
@@ -132,7 +147,7 @@ def save_schengen_airports():
 # ===== CREAR INTERFAZ GRÁFICA =====
 
 root = tk.Tk()
-root.geometry("1280x720")
+root.geometry("1920x1080")
 root.title("Airport Management System - UPC Group 9")
 
 # Configurar grid
@@ -218,10 +233,9 @@ picture_frame.grid(row=1, column=1, rowspan=2, padx=5, pady=5, sticky="nsew")
 picture_frame.rowconfigure(0, weight=1)
 picture_frame.columnconfigure(0, weight=1)
 
-# Label inicial
 initial_label = tk.Label(picture_frame, text="Selecciona una opción para visualizar",
                          font=("Arial", 12), fg="#7f8c8d")
 initial_label.pack(expand=True)
 
-# ===== EJECUTAR =====
+#abrir finestra
 root.mainloop()
