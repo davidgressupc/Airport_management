@@ -102,7 +102,6 @@ def RemoveAirport(airports, code):
             return 0
     return -1
 
-
 # ===== STEP 5 - GRÀFICS FÀCILS =====
 def PlotAirports(airports):
     """Mostra una gràfica de barres Schengen vs No-Schengen"""
