@@ -11,18 +11,14 @@ airports = []
 # ===== FUNCIONES PARA BOTONES (USANDO SOLO airport.py) =====
 
 def load_airports_from_file():
-    """Cargar aeroports desde fichero del proyecto"""
     global airports
-
     filename = "airports_file.txt"
-
     airports = LoadAirports(filename)
 
     if airports:
         messagebox.showinfo("Éxito", f"{len(airports)} aeroports carregats")
     else:
         messagebox.showerror("Error", f"No s'ha trobat el fitxer: {filename}")
-
 
 def add_airport_manual():
     """Añadir un aeroport manualmente - USA: Airport(), SetSchengen(), AddAirport()"""
@@ -160,7 +156,7 @@ root.rowconfigure(2, weight=1)
 # ===== PANEL IZQUIERDO - BOTONES =====
 
 # 1. Frame para Cargar/Guardar
-file_frame = tk.LabelFrame(root, text="📁 Ficheros", font=("Arial", 11, "bold"))
+file_frame = tk.LabelFrame(root, text="Ficheros", font=("Arial", 11, "bold"))
 file_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
 file_frame.columnconfigure(0, weight=1)
 
