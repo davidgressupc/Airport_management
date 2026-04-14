@@ -90,8 +90,7 @@ def show_plot_schengen():
         messagebox.showerror("Error", "No hi ha aeroports carregats")
         return
 
-    fig = PlotAirports(airports)
-    fig.show()
+    fig, ax = PlotAirports(airports)
 
     if fig is None:
         return

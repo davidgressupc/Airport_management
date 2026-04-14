@@ -106,28 +106,46 @@ def RemoveAirport(airports, code):
 def PlotAirports(airports):
     """Mostra una gràfica de barres Schengen vs No-Schengen"""
     if not airports:
-        print(" No hi ha aeroports per mostrar")
-        return
+        print("No hi ha aeroports per mostrar")
+        return None, None
 
-    # Comptem
-    schengen_count = sum(1 for a in airports if a.schengen)
+    # Comptem amb WHILE
+    i = 0
+    schengen_count = 0
+
+    while i < len(airports):
+        if airports[i].schengen:
+            schengen_count += 1
+        i += 1
+
     non_schengen_count = len(airports) - schengen_count
 
-    # Creem la gràfica
-    fig1 = plt.figure(figsize=(8, 6))
-    fig1 = plt.bar(['Schengen', 'No Schengen'], [schengen_count, non_schengen_count],
-            color=['#2ecc71', '#e74c3c'], width=0.5, edgecolor='black', linewidth=2)
-    fig1.ylabel('Nombre d\'aeroports', fontsize=12)
-    fig1.title('Aeroports Schengen vs No Schengen', fontsize=14, fontweight='bold')
-    fig1.grid(axis='y', alpha=0.3, linestyle='--')
+    # Crear figura i eixos
+    fig, ax = plt.subplots(figsize=(8, 6))
 
-    # Afegim etiquetes a les barres
-    for i, v in enumerate([schengen_count, non_schengen_count]):
-        plt.text(i, v + 1, str(v), ha='center', fontweight='bold', fontsize=11)
+    # Gràfica
+    ax.bar(['Schengen', 'No Schengen'],
+           [schengen_count, non_schengen_count],
+           color=['#2ecc71', '#e74c3c'],
+           width=0.5,
+           edgecolor='black',
+           linewidth=2)
 
-    fig1.tight_layout()
-    return fig1
+    ax.set_ylabel("Nombre d'aeroports", fontsize=12)
+    ax.set_title("Aeroports Schengen vs No Schengen", fontsize=14, fontweight='bold')
+    ax.grid(axis='y', alpha=0.3, linestyle='--')
 
+    # Etiquetes amb WHILE
+    values = [schengen_count, non_schengen_count]
+    i = 0
+    while i < len(values):
+        ax.text(i, values[i] + 1, str(values[i]),
+                ha='center', fontweight='bold', fontsize=11)
+        i += 1
+
+    plt.tight_layout()
+
+    return fig, ax
 
 def MapAirports(airports):
     """Crea un mapa KML per Google Earth (aeroports colorejats)"""
