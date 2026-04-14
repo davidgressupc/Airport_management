@@ -14,7 +14,7 @@ print(f"✓ Carregats {len(airports)} aeroports\n")
 
 if len(airports) > 0:
     print("Primeros 3 aeroports:")
-    for a in airports[:3]:
+    for a in airports[:3]: #cambiar por while
         PrintAirport(a)
     print()
 else:

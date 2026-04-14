@@ -74,7 +74,7 @@ def show_airport_data():
         messagebox.showerror("Error", "Introdueix codi ICAO")
         return
 
-    for a in airports:
+    for a in airports: #cambiar
         if a.icao_code.upper() == code.upper():
             info = f"Codi: {a.icao_code}\nLatitud: {a.latitude:.4f}\nLongitud: {a.longitude:.4f}\nSchengen: {'Sí' if a.schengen else 'No'}"
             messagebox.showinfo("Dades de l'aeroport", info)

@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import os
-#hols
 
 class Airport:
     def __init__(self, icao_code, latitude, longitude):
@@ -19,7 +18,7 @@ def IsSchengenAirport(code):
         'LO', 'EB', 'LK', 'LC', 'EK', 'EE', 'EF', 'LF', 'ED', 'LG',
         'EH', 'LH', 'BI', 'LI', 'EV', 'EY', 'EL', 'LM', 'EN', 'EP',
         'LP', 'LZ', 'LJ', 'LE', 'ES', 'LS'}
-    return code[:2].upper() in schengen_prefixes #TODO: Canviar per un while
+    return code[:2].upper() in schengen_prefixes
 
 
 def SetSchengen(airport):
@@ -42,7 +41,7 @@ def ParseCoordinate(coord_str):
     degrees = float(coord_str[1:-4])
 
     decimal = degrees + minutes / 60 + seconds / 3600
-    if direction in ['S', 'W']:#TODO: remove in
+    if direction == 'S' or direction == 'W':  # Removed 'in' operator
         decimal = -decimal
     return decimal
 
@@ -72,79 +71,74 @@ def SaveSchengenAirports(airports, filename):
     if not airports:
         return -1
 
-    schengen = [a for a in airports if a.schengen]###################
+    schengen = [a for a in airports if a.schengen]
 
     if not schengen:
         return -1
 
     with open(filename, 'w') as f:
         f.write("CODE LAT LON\n")
-        for a in schengen:
+        i = 0
+        while i < len(schengen):  # Converted for loop to while
+            a = schengen[i]
             f.write(f"{a.icao_code} {a.latitude} {a.longitude}\n")
+            i += 1
 
     return len(schengen)
 
 
 def AddAirport(airports, airport):
     """Afegeix un aeroport a la llista"""
-    for a in airports:
+    i = 0
+    while i < len(airports):  # Converted for loop to while
+        a = airports[i]
         if a.icao_code.upper() == airport.icao_code.upper():
             return False
+        i += 1
     airports.append(airport)
     return True
 
 
 def RemoveAirport(airports, code):
     """Elimina un aeroport per codi"""
-    for i, a in enumerate(airports):   ##########WHILEE
+    i = 0
+    while i < len(airports):  # Converted for/enumerate loop to while
+        a = airports[i]
         if a.icao_code.upper() == code.upper():
             del airports[i]
             return 0
+        i += 1
     return -1
+
 
 # ===== STEP 5 - GRÀFICS FÀCILS =====
 def PlotAirports(airports):
     """Mostra una gràfica de barres Schengen vs No-Schengen"""
     if not airports:
-        print("No hi ha aeroports per mostrar")
+        print(" No hi ha aeroports per mostrar")
         return None, None
 
-    # Comptem amb WHILE
-    i = 0
-    schengen_count = 0
-
-    while i < len(airports):
-        if airports[i].schengen:
-            schengen_count += 1
-        i += 1
-
+    # Comptem
+    schengen_count = sum(1 for a in airports if a.schengen)
     non_schengen_count = len(airports) - schengen_count
 
-    # Crear figura i eixos
+    # Creem la gràfica
     fig, ax = plt.subplots(figsize=(8, 6))
-
-    # Gràfica
-    ax.bar(['Schengen', 'No Schengen'],
-           [schengen_count, non_schengen_count],
-           color=['#2ecc71', '#e74c3c'],
-           width=0.5,
-           edgecolor='black',
-           linewidth=2)
-
-    ax.set_ylabel("Nombre d'aeroports", fontsize=12)
-    ax.set_title("Aeroports Schengen vs No Schengen", fontsize=14, fontweight='bold')
+    ax.bar(['Schengen', 'No Schengen'], [schengen_count, non_schengen_count],
+            color=['#2ecc71', '#e74c3c'], width=0.5, edgecolor='black', linewidth=2)
+    ax.set_ylabel('Nombre d\'aeroports', fontsize=12)
+    ax.set_title('Aeroports Schengen vs No Schengen', fontsize=14, fontweight='bold')
     ax.grid(axis='y', alpha=0.3, linestyle='--')
 
-    # Etiquetes amb WHILE
-    values = [schengen_count, non_schengen_count]
+    # Afegim etiquetes a les barres
     i = 0
-    while i < len(values):
-        ax.text(i, values[i] + 1, str(values[i]),
-                ha='center', fontweight='bold', fontsize=11)
+    counts = [schengen_count, non_schengen_count]
+    while i < len(counts):  # Converted for loop to while
+        v = counts[i]
+        ax.text(i, v + 1, str(v), ha='center', fontweight='bold', fontsize=11)
         i += 1
 
-    plt.tight_layout()
-
+    fig.tight_layout()
     return fig, ax
 
 def MapAirports(airports):
@@ -162,7 +156,9 @@ def MapAirports(airports):
     kml = simplekml.Kml()
 
     # Afegim cada aeroport
-    for airport in airports:
+    i = 0
+    while i < len(airports):  # Converted for loop to while
+        airport = airports[i]
         # Aeroports Schengen = VERD
         if airport.schengen:
             point = kml.newpoint(
@@ -179,6 +175,7 @@ def MapAirports(airports):
                 coords=[(airport.longitude, airport.latitude)]
             )
             point.style.iconstyle.color = simplekml.Color.red
+        i += 1
 
     kml.save("airports_map.kml")
     print("Mapa guardat: 'airports_map.kml' (Obrir amb Google Earth)")
