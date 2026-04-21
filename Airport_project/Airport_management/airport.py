@@ -141,18 +141,14 @@ def PlotAirports(airports):
     fig.tight_layout()
     return fig, ax
 
+import simplekml
+import os
+
 def MapAirports(airports):
     """Crea un mapa KML per Google Earth (aeroports colorejats)"""
 
     if not airports:
         print("No hi ha aeroports per mostrar")
-        return None
-
-    try:
-        import simplekml
-        import os
-    except ImportError:
-        print("simplekml no instal·lat. Executa: pip install simplekml")
         return None
 
     kml = simplekml.Kml()
