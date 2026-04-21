@@ -155,10 +155,7 @@ def save_schengen_airports():
 
 def load_arrivals_from_file():
     global aircrafts
-    filename = filedialog.askopenfilename(
-        title="Selecciona archivo de vuelos",
-        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
-    )
+    filename = "arrivals_file.txt"
 
     if filename:
         aircrafts = LoadArrivals(filename)
