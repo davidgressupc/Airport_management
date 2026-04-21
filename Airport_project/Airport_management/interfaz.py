@@ -10,7 +10,7 @@ airports = []
 aircrafts = []
 
 
-# ===== FUNCIONES PARA CARGAR AEROPORTS =====
+# ===== FUNCIONES PARA AEROPORTS =====
 
 def load_airports_from_file():
     global airports
@@ -23,7 +23,135 @@ def load_airports_from_file():
         messagebox.showerror("Error", f"No s'ha trobat el fitxer: {filename}")
 
 
-# ===== FUNCIONES PARA CARGAR VUELOS =====
+def add_airport_manual():
+    """Añadir un aeroport manualmente - USA: Airport(), SetSchengen(), AddAirport()"""
+    global airports
+    code_entry = entry_code.get()
+    try:
+        lat = float(entry_lat.get())
+        lon = float(entry_lon.get())
+
+        if not code_entry:
+            messagebox.showerror("Error", "Codi ICAO requerit")
+            return
+
+        new_airport = Airport(code_entry, lat, lon)
+        SetSchengen(new_airport)
+
+        if len(code_entry) != 4:
+            messagebox.showerror("Error", "Format incorrecte, necessita 4 caràcters")
+            return
+
+        if AddAirport(airports, new_airport):
+            messagebox.showinfo("Éxit", f"Aeroport {code_entry} afegit")
+            entry_code.delete(0, tk.END)
+            entry_lat.delete(0, tk.END)
+            entry_lon.delete(0, tk.END)
+            show_plot_schengen()  # actualizar gráfica
+
+        else:
+            messagebox.showwarning("Avis", f"L'aeroport {code_entry} ja existeix")
+    except ValueError:
+        messagebox.showerror("Error", "Latitud i Longitud han de ser nombres")
+
+
+def delete_airport_action():
+    """Eliminar un aeroport - USA: RemoveAirport()"""
+    global airports
+    code = entry_search.get()
+    if not code:
+        messagebox.showerror("Error", "Introdueix codi ICAO")
+        return
+
+    if RemoveAirport(airports, code) == 0:
+        messagebox.showinfo("Éxit", f"Aeroport {code} eliminat")
+        entry_search.delete(0, tk.END)
+        show_plot_schengen()  # actualizar gráfica
+    else:
+        messagebox.showerror("Error", f"Aeroport {code} no trobat")
+
+
+def show_airport_data():
+    """Mostrar dades de un aeroport - USA: PrintAirport()"""
+    global airports
+    code = entry_search.get()
+    if not code:
+        messagebox.showerror("Error", "Introdueix codi ICAO")
+        return
+
+    i = 0
+    while i < len(airports):
+        a = airports[i]
+        if a.icao_code.upper() == code.upper():
+            info = f"Codi: {a.icao_code}\nLatitud: {a.latitude:.4f}\nLongitud: {a.longitude:.4f}\nSchengen: {'Sí' if a.schengen else 'No'}"
+            messagebox.showinfo("Dades de l'aeroport", info)
+            return
+        i += 1
+
+    messagebox.showerror("Error", f"Aeroport {code} no trobat")
+
+
+def show_plot_schengen():
+    """Mostrar gràfica Schengen vs No-Schengen - USA: PlotAirports()"""
+    global airports
+    if not airports:
+        messagebox.showerror("Error", "No hi ha aeroports carregats")
+        return
+
+    fig, ax = PlotAirports(airports)
+
+    if fig is None:
+        return
+
+    # Mostrar en interfaz
+    for widget in picture_frame.winfo_children():
+        widget.destroy()
+
+    canvas = FigureCanvasTkAgg(fig, master=picture_frame)
+    canvas.draw()
+    canvas.get_tk_widget().pack(fill="both", expand=True)
+
+
+def show_google_earth_map():
+    global airports
+    if not airports:
+        messagebox.showerror("Error", "No hi ha aeroports carregats")
+        return
+
+    filepath = MapAirports(airports)
+
+    if filepath is None:
+        messagebox.showerror("Error", "No s'ha pogut generar el mapa")
+        return
+
+    import os
+    import subprocess
+    try:
+        os.startfile(filepath)
+    except AttributeError:
+        # Para Linux/Mac
+        subprocess.Popen(['open', filepath])
+    except:
+        pass
+
+    messagebox.showinfo("Éxito", f"Mapa obert:\n{filepath}")
+
+
+def save_schengen_airports():
+    """Guardar aeroports Schengen en fichero - USA: SaveSchengenAirports()"""
+    global airports
+    if not airports:
+        messagebox.showerror("Error", "No hi ha aeroports carregats")
+        return
+
+    result = SaveSchengenAirports(airports, "schengen_airports.txt")
+    if result > 0:
+        messagebox.showinfo("Éxito", f"✓ {result} aeroports Schengen guardats en 'schengen_airports.txt'")
+    else:
+        messagebox.showerror("Error", "No hi ha aeroports Schengen")
+
+
+# ===== FUNCIONES PARA VUELOS =====
 
 def load_arrivals_from_file():
     global aircrafts
@@ -39,8 +167,6 @@ def load_arrivals_from_file():
         else:
             messagebox.showerror("Error", "No se pudieron cargar vuelos del archivo")
 
-
-# ===== FUNCIONES PARA GRÁFICOS DE VUELOS =====
 
 def plot_arrivals_action():
     """Mostrar gráfica de llegadas por hora"""
@@ -126,7 +252,7 @@ def map_flights_action():
         # Para Linux/Mac
         subprocess.Popen(['open', filepath])
     except:
-        messagebox.showinfo("Éxito", f"Mapa guardado en:\n{filepath}\nÁbrelo con Google Earth")
+        pass
 
     messagebox.showinfo("Éxito", f"Mapa abierto:\n{filepath}")
 
@@ -190,29 +316,102 @@ def save_flights_action():
 
 root = tk.Tk()
 root.geometry("1920x1080")
-root.title("Airport Management System v2.0 - UPC Group 9")
+root.title("Airport Management System v3.0 - UPC Group 9")
 
 # Configurar grid
 root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=10)
-root.rowconfigure(0, weight=2)
-root.rowconfigure(1, weight=2)
+root.rowconfigure(0, weight=1)
+root.rowconfigure(1, weight=1)
 root.rowconfigure(2, weight=1)
+root.rowconfigure(3, weight=1)
+root.rowconfigure(4, weight=2)
 
-# ===== PANEL IZQUIERDO - BOTONES =====
+# ===== PANEL IZQUIERDO - BOTONES (SCROLLABLE) =====
+
+# Crear Canvas con Scrollbar para panel izquierdo
+canvas_left = tk.Canvas(root, bg="#ecf0f1")
+scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas_left.yview)
+scrollable_frame = tk.Frame(canvas_left, bg="#ecf0f1")
+
+scrollable_frame.bind(
+    "<Configure>",
+    lambda e: canvas_left.configure(scrollregion=canvas_left.bbox("all"))
+)
+
+canvas_left.create_window((0, 0), window=scrollable_frame, anchor="nw")
+canvas_left.configure(yscrollcommand=scrollbar.set)
+
+canvas_left.grid(row=0, column=0, rowspan=5, padx=5, pady=5, sticky="nsew")
+scrollbar.grid(row=0, column=0, rowspan=5, padx=(0, 5), pady=5, sticky="nse")
 
 # 1. Frame para Cargar Aeroports
-file_frame = tk.LabelFrame(root, text="📁 Aeroports", font=("Arial", 11, "bold"))
-file_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+file_frame = tk.LabelFrame(scrollable_frame, text="📁 Aeroports", font=("Arial", 11, "bold"))
+file_frame.pack(fill="x", padx=5, pady=5)
 file_frame.columnconfigure(0, weight=1)
 
 buttonload = tk.Button(file_frame, text="Cargar Aeroports", command=load_airports_from_file,
                        bg="#3498db", fg="white", font=("Arial", 10, "bold"), height=2)
 buttonload.pack(fill="both", expand=True, padx=5, pady=5)
 
-# 2. Frame para Cargar/Guardar Vuelos
-flights_frame = tk.LabelFrame(root, text="✈️ Vuelos", font=("Arial", 11, "bold"))
-flights_frame.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+button_map_airports = tk.Button(file_frame, text="Mapa Google Earth", command=show_google_earth_map,
+                                bg="#f39c12", fg="white", font=("Arial", 10, "bold"), height=2)
+button_map_airports.pack(fill="both", expand=True, padx=5, pady=5)
+
+buttonsave = tk.Button(file_frame, text="Guardar Aeroports Schengen", command=save_schengen_airports,
+                       bg="#27ae60", fg="white", font=("Arial", 10, "bold"), height=2)
+buttonsave.pack(fill="both", expand=True, padx=5, pady=5)
+
+# 2. Frame para Gráficos de Aeroports
+graph_frame = tk.LabelFrame(scrollable_frame, text="📊 Gráficos Aeroports", font=("Arial", 11, "bold"))
+graph_frame.pack(fill="x", padx=5, pady=5)
+graph_frame.columnconfigure(0, weight=1)
+
+button_plot = tk.Button(graph_frame, text="Mostrar Schengen vs No-Schengen", command=show_plot_schengen,
+                        bg="#e74c3c", fg="white", font=("Arial", 10, "bold"))
+button_plot.pack(fill="x", padx=5, pady=5)
+
+# 3. Frame para Búsqueda/Eliminar Aeroports
+search_frame = tk.LabelFrame(scrollable_frame, text="🔍 Buscar/Eliminar Aeroport", font=("Arial", 11, "bold"))
+search_frame.pack(fill="x", padx=5, pady=5)
+search_frame.columnconfigure(0, weight=1)
+
+tk.Label(search_frame, text="Codi ICAO:", font=("Arial", 9)).pack(anchor="w", padx=5, pady=2)
+entry_search = tk.Entry(search_frame, font=("Arial", 10))
+entry_search.pack(fill="x", padx=5, pady=2)
+
+button_show = tk.Button(search_frame, text="Ver Dades", command=show_airport_data,
+                        bg="#3498db", fg="white", font=("Arial", 9, "bold"))
+button_show.pack(fill="x", padx=5, pady=3)
+
+button_delete = tk.Button(search_frame, text="Eliminar Aeroport", command=delete_airport_action,
+                          bg="#e74c3c", fg="white", font=("Arial", 9, "bold"))
+button_delete.pack(fill="x", padx=5, pady=3)
+
+# 4. Frame para Añadir Aeroport
+add_frame = tk.LabelFrame(scrollable_frame, text="➕ Añadir Aeroport", font=("Arial", 11, "bold"))
+add_frame.pack(fill="x", padx=5, pady=5)
+add_frame.columnconfigure(0, weight=1)
+
+tk.Label(add_frame, text="Codi ICAO:", font=("Arial", 9)).pack(anchor="w", padx=5, pady=2)
+entry_code = tk.Entry(add_frame, font=("Arial", 10))
+entry_code.pack(fill="x", padx=5, pady=2)
+
+tk.Label(add_frame, text="Latitud:", font=("Arial", 9)).pack(anchor="w", padx=5, pady=2)
+entry_lat = tk.Entry(add_frame, font=("Arial", 10))
+entry_lat.pack(fill="x", padx=5, pady=2)
+
+tk.Label(add_frame, text="Longitud:", font=("Arial", 9)).pack(anchor="w", padx=5, pady=2)
+entry_lon = tk.Entry(add_frame, font=("Arial", 10))
+entry_lon.pack(fill="x", padx=5, pady=2)
+
+button_add = tk.Button(add_frame, text="Afegir Aeroport", command=add_airport_manual,
+                       bg="#27ae60", fg="white", font=("Arial", 10, "bold"))
+button_add.pack(fill="x", padx=5, pady=5)
+
+# 5. Frame para Cargar Vuelos
+flights_frame = tk.LabelFrame(scrollable_frame, text="✈️ Vuelos", font=("Arial", 11, "bold"))
+flights_frame.pack(fill="x", padx=5, pady=5)
 flights_frame.columnconfigure(0, weight=1)
 
 button_load_flights = tk.Button(flights_frame, text="Cargar Vuelos", command=load_arrivals_from_file,
@@ -223,20 +422,20 @@ button_save_flights = tk.Button(flights_frame, text="Guardar Vuelos", command=sa
                                 bg="#16a085", fg="white", font=("Arial", 10, "bold"), height=2)
 button_save_flights.pack(fill="both", expand=True, padx=5, pady=5)
 
-# 3. Frame para Gráficos de Vuelos
-graph_flights_frame = tk.LabelFrame(root, text="📊 Gráficos", font=("Arial", 11, "bold"))
-graph_flights_frame.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
+# 6. Frame para Gráficos de Vuelos
+graph_flights_frame = tk.LabelFrame(scrollable_frame, text="📊 Gráficos Vuelos", font=("Arial", 11, "bold"))
+graph_flights_frame.pack(fill="x", padx=5, pady=5)
 graph_flights_frame.columnconfigure(0, weight=1)
 
-button_plot_arrivals = tk.Button(graph_flights_frame, text="Llegadas/Hora", command=plot_arrivals_action,
+button_plot_arrivals = tk.Button(graph_flights_frame, text="Llegadas por Hora", command=plot_arrivals_action,
                                  bg="#e67e22", fg="white", font=("Arial", 9, "bold"))
 button_plot_arrivals.pack(fill="x", padx=5, pady=3)
 
-button_plot_airlines = tk.Button(graph_flights_frame, text="Vuelos/Aerolínea", command=plot_airlines_action,
+button_plot_airlines = tk.Button(graph_flights_frame, text="Vuelos por Aerolínea", command=plot_airlines_action,
                                  bg="#c0392b", fg="white", font=("Arial", 9, "bold"))
 button_plot_airlines.pack(fill="x", padx=5, pady=3)
 
-button_plot_type = tk.Button(graph_flights_frame, text="Schengen vs No", command=plot_flights_type_action,
+button_plot_type = tk.Button(graph_flights_frame, text="Vuelos Schengen vs No", command=plot_flights_type_action,
                              bg="#27ae60", fg="white", font=("Arial", 9, "bold"))
 button_plot_type.pack(fill="x", padx=5, pady=3)
 
@@ -251,7 +450,7 @@ button_long_dist.pack(fill="x", padx=5, pady=3)
 # ===== PANEL DERECHO - VISUALIZACIÓN =====
 
 picture_frame = tk.LabelFrame(root, text="📈 Visualización", font=("Arial", 11, "bold"))
-picture_frame.grid(row=0, column=1, rowspan=3, padx=5, pady=5, sticky="nsew")
+picture_frame.grid(row=0, column=1, rowspan=5, padx=5, pady=5, sticky="nsew")
 picture_frame.rowconfigure(0, weight=1)
 picture_frame.columnconfigure(0, weight=1)
 
