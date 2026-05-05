@@ -34,7 +34,6 @@ def HaversineDistance(lat1, lon1, lat2, lon2):
     return distance
 
 
-# ===== PARSE TIME FUNCTION =====
 def ParseTime(time_str):
     """Convierte una cadena de tiempo (hh:mm o h:mm) a minutos desde medianoche"""
     try:
