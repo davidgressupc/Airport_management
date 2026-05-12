@@ -69,14 +69,14 @@ def LoadAirlines(terminal, t_name):
     except FileNotFoundError:
         return -1
 
-
+//////////////////////////////
 # ===== LOAD AIRPORT STRUCTURE =====
 def LoadAirportStructure(filename):
     """Carga la estructura del aeropuerto desde un archivo"""
     try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-
+        #with open(filename, 'r', encoding='utf-8') as f:
+        #    lines = f.readlines()
+        bcn = open("Terminals.txt", "r")
         # Primera línea: código y número de terminales
         parts = lines[0].strip().split()
         code = parts[0]
@@ -131,7 +131,7 @@ def LoadAirportStructure(filename):
         print(f"Error al cargar estructura: {e}")
         return None
 
-
+//////////////////////////
 # ===== IS AIRLINE IN TERMINAL =====
 def IsAirlineInTerminal(terminal, name):
     """Verifica si una aerolínea está en el terminal"""
