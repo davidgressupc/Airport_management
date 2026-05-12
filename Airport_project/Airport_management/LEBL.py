@@ -26,15 +26,15 @@ class Terminal:
 
 
 class BarcelonaAP:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, code):
+        self.code = code
         self.terminals = []
 
 
 # ===== SET GATES =====
 def SetGates(area, init_gate, end_gate, prefix):
     """Asigna gates a un boarding area"""
-    if end_gate <= init_gate:
+    if end_gate < init_gate:
         return -1
 
     area.gates = []
@@ -62,50 +62,62 @@ def LoadAirlines(terminal, t_name):
                 if line:
                     parts = line.split('\t')
                     if len(parts) >= 2:
-                        airline_code = parts[1]
+                        airline_code = parts[1].strip()
                         terminal.airlines.append(airline_code)
                 i += 1
         return len(terminal.airlines)
     except FileNotFoundError:
+        print(f"Archivo {filename} no encontrado")
+        return -1
+    except Exception as e:
+        print(f"Error cargando aerolíneas: {e}")
         return -1
 
-//////////////////////////////
+
 # ===== LOAD AIRPORT STRUCTURE =====
 def LoadAirportStructure(filename):
     """Carga la estructura del aeropuerto desde un archivo"""
     try:
-        #with open(filename, 'r', encoding='utf-8') as f:
-        #    lines = f.readlines()
-        bcn = open("Terminals.txt", "r")
-        # Primera línea: código y número de terminales
-        parts = lines[0].strip().split()
-        code = parts[0]
-        num_terminals = int(parts[2])
+        with open(filename, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+
+        if len(lines) < 1:
+            print("Archivo vacío")
+            return None
+
+        # Primera línea: "LEBL 2 terminals"
+        first_line = lines[0].strip().split()
+        code = first_line[0]
+        num_terminals = int(first_line[1])
 
         bcn = BarcelonaAP(code)
 
         line_idx = 1
         t = 0
-        while t < num_terminals:
-            # Línea de terminal
-            terminal_parts = lines[line_idx].strip().split()
-            terminal_name = terminal_parts[1]
-            num_areas = int(terminal_parts[3])
+        while t < num_terminals and line_idx < len(lines):
+            # Línea de terminal: "Terminal T1 5 boarding areas"
+            terminal_line = lines[line_idx].strip().split()
+            terminal_name = terminal_line[1]  # T1 o T2
+            num_areas = int(terminal_line[2])
 
             terminal = Terminal(terminal_name)
+
+            # Cargar aerolíneas
             LoadAirlines(terminal, terminal_name)
 
             line_idx += 1
             a = 0
-            while a < num_areas:
-                # Línea de boarding area
+            while a < num_areas and line_idx < len(lines):
+                # Línea de boarding area: "Area A Schengen Gates 1 - 11"
                 area_line = lines[line_idx].strip()
                 area_parts = area_line.split()
 
-                area_name = area_parts[0]
-                area_type = area_parts[1]  # "Schengen" o "non-Schengen"
-                init_gate = int(area_parts[3])
-                end_gate = int(area_parts[5])
+                area_name = area_parts[1]  # A, B, C, M, R, etc.
+                area_type = area_parts[2]  # Schengen o non-Schengen
+                # area_parts[3] es "Gates"
+                init_gate = int(area_parts[4])
+                # area_parts[5] es "-"
+                end_gate = int(area_parts[6])
 
                 # Crear prefix (ej: T1A, T2M)
                 prefix = f"{terminal_name}{area_name}"
@@ -127,11 +139,16 @@ def LoadAirportStructure(filename):
     except FileNotFoundError:
         print(f"Error: Archivo '{filename}' no encontrado")
         return None
+    except ValueError as e:
+        print(f"Error de valor: {e}")
+        return None
     except Exception as e:
-        print(f"Error al cargar estructura: {e}")
+        print(f"Error inesperado: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return None
 
-//////////////////////////
+
 # ===== IS AIRLINE IN TERMINAL =====
 def IsAirlineInTerminal(terminal, name):
     """Verifica si una aerolínea está en el terminal"""
@@ -318,15 +335,13 @@ def PlotGates(bcn):
 if __name__ == "__main__":
     print("=== TEST LEBL.PY ===\n")
 
-    # Test 1: Cargar estructura
     print("Test 1: Cargar estructura del aeropuerto")
     bcn = LoadAirportStructure("Terminals.txt")
 
     if bcn:
-        print(f"✓ Aeropuerto {bcn.name} cargado")
+        print(f"✓ Aeropuerto {bcn.code} cargado")
         print(f"✓ Terminales: {len(bcn.terminals)}\n")
 
-        # Mostrar información
         i = 0
         while i < len(bcn.terminals):
             terminal = bcn.terminals[i]
@@ -342,12 +357,7 @@ if __name__ == "__main__":
 
             i += 1
 
-        print()
-
-        # Test 2: Asignar gates
-        print("Test 2: Asignar gates a vuelos")
-        from aircraft import Aircraft
-
+        print("\nTest 2: Asignar gates a vuelos")
         test_flight1 = Aircraft("ECMKV", "VLG", "LYBE", "00:04")
         test_flight2 = Aircraft("EIDPG", "RYR", "LEPA", "04:57")
 
@@ -357,7 +367,6 @@ if __name__ == "__main__":
         print(f"✓ Vuelo ECMKV asignado: {'OK' if result1 == 0 else 'ERROR'}")
         print(f"✓ Vuelo EIDPG asignado: {'OK' if result2 == 0 else 'ERROR'}\n")
 
-        # Test 3: Ocupación
         print("Test 3: Estado de gates")
         occupancy = GateOccupancy(bcn)
         print(f"✓ Total de gates: {len(occupancy)}")
@@ -375,12 +384,12 @@ if __name__ == "__main__":
         print(f"✓ Gates libres: {free}")
         print(f"✓ Gates ocupados: {occupied}\n")
 
-        # Test 4: Plot
         print("Test 4: Visualizar gates")
         fig, axes = PlotGates(bcn)
         if fig:
-            print("✓ Gráfica generada")
+            print("✓ Gráfica generada correctamente")
             plt.show()
     else:
-        print("Error al cargar el aeropuerto")
+        print("✗ Error al cargar el aeropuerto")
+
 
