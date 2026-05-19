@@ -253,8 +253,10 @@ def map_flights_action():
     messagebox.showinfo("Éxito", f"Mapa abierto:\n{filepath}")
 
 
+
+
 def long_distance_action():
-    """Mostrar mapa de vuelos de larga distancia"""
+
     global aircrafts, airports
     if not aircrafts:
         messagebox.showerror("Error", "No hay vuelos cargados")
@@ -287,7 +289,60 @@ def long_distance_action():
     messagebox.showinfo("Éxito",
                         f"Mapa guardado:\n{filepath}\n({len(long_distance_flights)} vuelos de larga distancia)")
 
+#/////////////////////////////////////////EXAMEN:
+def non_schengen_action():
 
+    """Mostrar solo vuelos NO Schengen en Google Earth"""
+
+    global aircrafts, airports
+
+    if not aircrafts or not airports:
+        messagebox.showerror("Error", "Faltan datos")
+        return
+
+    non_schengen = []
+
+    i = 0
+    while i < len(aircrafts):
+
+        j = 0
+        found = False
+
+        while j < len(airports) and not found:
+
+            airport = airports[j]
+
+            if airport.icao_code.upper() == aircrafts[i].origin.upper():
+
+                if airport.schengen == False:
+                    non_schengen.append(aircrafts[i])
+
+                found = True
+
+            j += 1
+
+        i += 1
+
+    if len(non_schengen) == 0:
+        messagebox.showinfo("Info", "No hay vuelos NO Schengen")
+        return
+
+    filepath = MapFlights(non_schengen, airports)
+
+    import os
+    import subprocess
+
+    try:
+        os.startfile(filepath)
+
+    except AttributeError:
+        subprocess.Popen(['open', filepath])
+
+    messagebox.showinfo(
+        "Éxito",
+        f"{len(non_schengen)} vuelos NO Schengen mostrados"
+    )
+#//////////////////////////////////////////////////////////////////////
 def save_flights_action():
     """Guardar vuelos en archivo"""
     global aircrafts
@@ -542,7 +597,18 @@ button_map.pack(fill="x", padx=5, pady=3)
 button_long_dist = tk.Button(graph_flights_frame, text="Larga Distancia >2000km", command=long_distance_action,
                              bg="#f39c12", fg="white", font=("Arial", 9, "bold"))
 button_long_dist.pack(fill="x", padx=5, pady=3)
+#EXÁMEN: ///////////////////////////////////////////7777777777777
+button_non_schengen = tk.Button(
+    graph_flights_frame,
+    text="Mapa vuelos NO Schengen",
+    command=non_schengen_action,
+    bg="#8e44ad",
+    fg="white",
+    font=("Arial", 9, "bold")
+)
 
+button_non_schengen.pack(fill="x", padx=5, pady=3)
+#///////////////////////////////////777
 # 7. NUEVO - Gestión de Gates (VERSIÓN 3)
 gates_frame = tk.LabelFrame(scrollable_frame, text="🚪 Gestión de Gates V3", font=("Arial", 11, "bold"))
 gates_frame.pack(fill="x", padx=5, pady=5)
@@ -577,3 +643,4 @@ initial_label.pack(expand=True)
 
 # Abrir ventana
 root.mainloop()
+
