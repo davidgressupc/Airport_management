@@ -60,11 +60,16 @@ def LoadAirlines(terminal, t_name):
             while i < len(lines):
                 line = lines[i].strip()
                 if line:
+                    # El formato es: Nombre\tCódigo
                     parts = line.split('\t')
                     if len(parts) >= 2:
-                        airline_code = parts[1].strip()
+                        airline_code = parts[1].strip()  # Cogemos el código (segunda columna)
                         terminal.airlines.append(airline_code)
+                    elif len(parts) == 1:
+                        # Si solo hay un valor, lo usamos como código
+                        terminal.airlines.append(parts[0].strip())
                 i += 1
+
         return len(terminal.airlines)
     except FileNotFoundError:
         print(f"Archivo {filename} no encontrado")
@@ -121,7 +126,6 @@ def LoadAirportStructure(filename):
 
                 # Crear prefix (ej: T1A, T2M)
                 prefix = f"{terminal_name}{area_name}"
-
                 area = BoardingArea(area_name)
                 area.area_type = area_type
                 SetGates(area, init_gate, end_gate, prefix)
@@ -151,7 +155,7 @@ def LoadAirportStructure(filename):
 
 # ===== IS AIRLINE IN TERMINAL =====
 def IsAirlineInTerminal(terminal, name):
-    """Verifica si una aerolínea está en la terminal"""
+    """Verifica si una aerolínea está en el terminal"""
     if not name or len(name) == 0:
         return False
 
@@ -185,7 +189,12 @@ def SearchTerminal(bcn, airline_code):
 
 # ===== ASSIGN GATE =====
 def AssignGate(bcn, aircraft):
-    """Asigna un gate a un vuelo"""
+    """Asigna un gate a un vuelo basado en aerolínea y origen Schengen/no-Schengen"""
+
+    # Validar que la aerolínea existe
+    if not aircraft.airline or len(aircraft.airline) == 0:
+        return -1
+
     # Buscar terminal de la aerolínea
     terminal_name = SearchTerminal(bcn, aircraft.airline)
     if not terminal_name:
@@ -203,20 +212,22 @@ def AssignGate(bcn, aircraft):
     if not terminal:
         return -1
 
-    # Determinar tipo de boarding area (Schengen o no)
+    # Determinar tipo de boarding area (Schengen o no-Schengen)
     is_schengen = IsSchengenAirport(aircraft.origin)
     required_type = "Schengen" if is_schengen else "non-Schengen"
 
-    # Buscar gate libre
+    # Buscar gate libre del tipo requerido
     i = 0
     while i < len(terminal.boarding_areas):
         area = terminal.boarding_areas[i]
 
+        # Solo buscar en áreas del tipo correcto
         if area.area_type == required_type:
             j = 0
             while j < len(area.gates):
                 gate = area.gates[j]
                 if not gate.occupied:
+                    # ASIGNAR GATE
                     gate.occupied = True
                     gate.aircraft_id = aircraft.aircraft_id
                     return 0
@@ -224,6 +235,7 @@ def AssignGate(bcn, aircraft):
 
         i += 1
 
+    # No hay gates disponibles del tipo requerido
     return -1
 
 
@@ -265,12 +277,12 @@ def GateOccupancy(bcn):
 
 # ===== PLOT GATES =====
 def PlotGates(bcn):
-    """Visualiza los gates del aeropuerto"""
+    """Visualiza los gates del aeropuerto - CORREGIDO para mostrar Gate E y todas las áreas"""
     if not bcn or not bcn.terminals:
         print("Error: No hay estructura de aeropuerto")
         return None, None
 
-    fig, axes = plt.subplots(1, len(bcn.terminals), figsize=(15, 6))
+    fig, axes = plt.subplots(1, len(bcn.terminals), figsize=(18, 10))
 
     if len(bcn.terminals) == 1:
         axes = [axes]
@@ -280,116 +292,66 @@ def PlotGates(bcn):
         terminal = bcn.terminals[t]
         ax = axes[t]
 
+        # Calcular altura total necesaria (más espacio para todas las áreas)
+        total_height = len(terminal.boarding_areas) * 3.5
+
         ax.set_title(f"Terminal {terminal.name}", fontsize=14, fontweight='bold')
-        ax.set_xlim(-0.5, 10)
-        ax.set_ylim(-0.5, len(terminal.boarding_areas) * 3)
+        ax.set_xlim(-1.5, 11)
+        ax.set_ylim(0, total_height)
         ax.axis('off')
 
-        y_pos = len(terminal.boarding_areas) * 3 - 1
+        y_pos = total_height - 1
 
         a = 0
         while a < len(terminal.boarding_areas):
             area = terminal.boarding_areas[a]
 
             # Título del área
-            ax.text(-0.3, y_pos, f"{area.name} ({area.area_type})",
-                    fontsize=10, fontweight='bold')
+            ax.text(-1.2, y_pos, f"{area.name} ({area.area_type})",
+                    fontsize=11, fontweight='bold', color='#2c3e50')
             y_pos -= 0.7
 
-            # Gates
+            # Gates - mostrar en filas
             x_pos = 0
+            max_x = 10
             g = 0
+
             while g < len(area.gates):
                 gate = area.gates[g]
 
                 # Color según ocupación
-                color = '#e74c3c' if gate.occupied else '#2ecc71'
+                if gate.occupied:
+                    color = '#e74c3c'  # Rojo - Ocupado
+                else:
+                    color = '#2ecc71'  # Verde - Libre
 
-                rect = patches.Rectangle((x_pos, y_pos - 0.5), 0.8, 0.4,
-                                         linewidth=1, edgecolor='black',
-                                         facecolor=color, alpha=0.7)
+                # Dibujar rectángulo del gate
+                rect = patches.Rectangle((x_pos, y_pos - 0.45), 0.9, 0.4,
+                                         linewidth=1.5, edgecolor='#34495e',
+                                         facecolor=color, alpha=0.8)
                 ax.add_patch(rect)
 
-                # Etiqueta
-                label = f"G{g + 1}" if not gate.occupied else gate.aircraft_id[:3]
-                ax.text(x_pos + 0.4, y_pos - 0.3, label, ha='center', va='center',
+                # Etiqueta - mostrar número de gate
+                gate_number = gate.name.split('G')[1] if 'G' in gate.name else str(g + 1)
+                label = gate_number if not gate.occupied else gate.aircraft_id[:3]
+
+                ax.text(x_pos + 0.45, y_pos - 0.25, label, ha='center', va='center',
                         fontsize=8, fontweight='bold', color='white')
 
-                x_pos += 1
-                if x_pos > 9:
+                x_pos += 1.0
+
+                # Si llegamos al final de la fila, bajar y reiniciar
+                if x_pos > max_x:
                     x_pos = 0
-                    y_pos -= 0.7
+                    y_pos -= 0.6
 
                 g += 1
 
-            y_pos -= 1.5
+            # Espaciado entre áreas
+            y_pos -= 1.2
             a += 1
 
         t += 1
 
     plt.tight_layout()
     return fig, axes
-
-
-# ===== TEST SECTION =====
-if __name__ == "__main__":
-    print("=== TEST LEBL.PY ===\n")
-
-    print("Test 1: Cargar estructura del aeropuerto")
-    bcn = LoadAirportStructure("Terminals.txt")
-
-    if bcn:
-        print(f"✓ Aeropuerto {bcn.code} cargado")
-        print(f"✓ Terminales: {len(bcn.terminals)}\n")
-
-        i = 0
-        while i < len(bcn.terminals):
-            terminal = bcn.terminals[i]
-            print(f"Terminal {terminal.name}:")
-            print(f"  Aerolíneas: {len(terminal.airlines)}")
-            print(f"  Boarding Areas: {len(terminal.boarding_areas)}")
-
-            j = 0
-            while j < len(terminal.boarding_areas):
-                area = terminal.boarding_areas[j]
-                print(f"    - {area.name} ({area.area_type}): {len(area.gates)} gates")
-                j += 1
-
-            i += 1
-
-        print("\nTest 2: Asignar gates a vuelos")
-        test_flight1 = Aircraft("ECMKV", "VLG", "LYBE", "00:04")
-        test_flight2 = Aircraft("EIDPG", "RYR", "LEPA", "04:57")
-
-        result1 = AssignGate(bcn, test_flight1)
-        result2 = AssignGate(bcn, test_flight2)
-
-        print(f"✓ Vuelo ECMKV asignado: {'OK' if result1 == 0 else 'ERROR'}")
-        print(f"✓ Vuelo EIDPG asignado: {'OK' if result2 == 0 else 'ERROR'}\n")
-
-        print("Test 3: Estado de gates")
-        occupancy = GateOccupancy(bcn)
-        print(f"✓ Total de gates: {len(occupancy)}")
-
-        occupied = 0
-        free = 0
-        i = 0
-        while i < len(occupancy):
-            if occupancy[i]['status'] == 'Ocupado':
-                occupied += 1
-            else:
-                free += 1
-            i += 1
-
-        print(f"✓ Gates libres: {free}")
-        print(f"✓ Gates ocupados: {occupied}\n")
-
-        print("Test 4: Visualizar gates")
-        fig, axes = PlotGates(bcn)
-        if fig:
-            print("✓ Gráfica generada correctamente")
-            plt.show()
-    else:
-        print("✗ Error al cargar el aeropuerto")
-
-

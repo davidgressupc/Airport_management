@@ -365,8 +365,10 @@ def save_flights_action():
 def load_airport_structure():
     """Carga la estructura del aeropuerto (terminales y gates)"""
     global bcn
-    filename = "Terminals.txt"
-
+    filename = filedialog.askopenfilename(
+        title="Selecciona archivo de estructura del aeropuerto",
+        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+    )
     if filename:
         bcn = LoadAirportStructure(filename)
         if bcn:
@@ -383,7 +385,17 @@ def load_airport_structure():
                     j += 1
                 i += 1
 
-            messagebox.showinfo("Éxito", f"Aeropuerto {bcn.code} cargado\nTotal de gates: {total_gates}")
+            # Mostrar info de aerolíneas por terminal
+            info_text = f"✓ Aeropuerto {bcn.code} cargado\n✓ Total de gates: {total_gates}\n\n"
+            info_text += "Aerolíneas por terminal:\n"
+
+            i = 0
+            while i < len(bcn.terminals):
+                terminal = bcn.terminals[i]
+                info_text += f"  • Terminal {terminal.name}: {len(terminal.airlines)} aerolíneas\n"
+                i += 1
+
+            messagebox.showinfo("Éxito", info_text)
         else:
             messagebox.showerror("Error", "No se pudo cargar la estructura")
 
@@ -400,19 +412,88 @@ def assign_gates_to_flights():
 
     assigned = 0
     failed = 0
+    failed_airlines = []
 
     i = 0
     while i < len(aircrafts):
-        result = AssignGate(bcn, aircrafts[i])
+        aircraft = aircrafts[i]
+        result = AssignGate(bcn, aircraft)
+
         if result == 0:
             assigned += 1
         else:
             failed += 1
+            if aircraft.airline not in failed_airlines:
+                failed_airlines.append(aircraft.airline)
+
         i += 1
 
-    messagebox.showinfo("Asignación", f"✓ {assigned} vuelos asignados\n✗ {failed} sin gate disponible")
+    # Mostrar resultado
+    message = f"✓ {assigned} vuelos asignados a gates\n✗ {failed} sin gate disponible"
+
+    if failed_airlines:
+        message += f"\n\nAerolíneas sin terminal asignado:"
+        j = 0
+        while j < len(failed_airlines):
+            message += f"\n  - {failed_airlines[j]}"
+            j += 1
+
+    messagebox.showinfo("Asignación de Gates", message)
 
 
+def show_gate_occupancy():
+    """Muestra el estado de los gates"""
+    global bcn
+    if not bcn:
+        messagebox.showerror("Error", "No hay estructura del aeropuerto cargada")
+        return
+
+    occupancy = GateOccupancy(bcn)
+
+    # Contar gates
+    free_gates = 0
+    occupied_gates = 0
+
+    i = 0
+    while i < len(occupancy):
+        if occupancy[i]['status'] == 'Libre':
+            free_gates += 1
+        else:
+            occupied_gates += 1
+        i += 1
+
+    info_text = f"📊 Estado de Gates\n\n"
+    info_text += f"✓ Gates libres: {free_gates}\n"
+    info_text += f"✗ Gates ocupados: {occupied_gates}\n"
+    info_text += f"Total: {len(occupancy)}"
+
+    messagebox.showinfo("Estado de Gates", info_text)
+
+
+def plot_gates_action():
+    """Visualiza los gates - MUESTRA EL PLOT EN LA INTERFAZ"""
+    global bcn
+    if not bcn:
+        messagebox.showerror("Error", "No hay estructura del aeropuerto cargada")
+        return
+
+    try:
+        fig, axes = PlotGates(bcn)
+        if fig is None:
+            messagebox.showerror("Error", "No se pudo generar la gráfica de gates")
+            return
+
+        # Limpiar frame anterior
+        for widget in picture_frame.winfo_children():
+            widget.destroy()
+
+        # Crear canvas de matplotlib y mostrarlo en la interfaz
+        canvas = FigureCanvasTkAgg(fig, master=picture_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=True)
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Error al visualizar gates: {str(e)}")
 def show_gate_occupancy():
     """Muestra el estado de los gates"""
     global bcn
@@ -620,6 +701,27 @@ button_gate_status.pack(fill="x", padx=5, pady=3)
 button_plot_gates = tk.Button(gates_frame, text="Visualizar Gates", command=plot_gates_action,
                               bg="#16a085", fg="white", font=("Arial", 10, "bold"))
 button_plot_gates.pack(fill="x", padx=5, pady=3)
+
+# 7. NUEVO - Gestión de Gates (VERSIÓN 3)
+gates_frame = tk.LabelFrame(scrollable_frame, text="🚪 Gestión de Gates V3", font=("Arial", 11, "bold"))
+gates_frame.pack(fill="x", padx=5, pady=5)
+gates_frame.columnconfigure(0, weight=1)
+
+button_load_structure = tk.Button(gates_frame, text="Cargar Estructura LEBL", command=load_airport_structure,
+                                  bg="#8e44ad", fg="white", font=("Arial", 10, "bold"), height=2)
+button_load_structure.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_assign_gates = tk.Button(gates_frame, text="Asignar Gates a Vuelos", command=assign_gates_to_flights,
+                                bg="#d35400", fg="white", font=("Arial", 10, "bold"), height=2)
+button_assign_gates.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_gate_status = tk.Button(gates_frame, text="Ver Estado de Gates", command=show_gate_occupancy,
+                               bg="#2980b9", fg="white", font=("Arial", 10, "bold"), height=2)
+button_gate_status.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_plot_gates = tk.Button(gates_frame, text="Visualizar Gates", command=plot_gates_action,
+                              bg="#16a085", fg="white", font=("Arial", 10, "bold"), height=2)
+button_plot_gates.pack(fill="both", expand=True, padx=5, pady=5)
 
 # ===== PANEL DERECHO - VISUALIZACIÓN =====
 
