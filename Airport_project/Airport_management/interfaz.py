@@ -365,10 +365,8 @@ def save_flights_action():
 def load_airport_structure():
     """Carga la estructura del aeropuerto (terminales y gates)"""
     global bcn
-    filename = filedialog.askopenfilename(
-        title="Selecciona archivo de estructura del aeropuerto",
-        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
-    )
+    filename = "Terminals.txt"
+
     if filename:
         bcn = LoadAirportStructure(filename)
         if bcn:
@@ -680,27 +678,6 @@ button_non_schengen = tk.Button(
 )
 
 button_non_schengen.pack(fill="x", padx=5, pady=3)
-#///////////////////////////////////777
-# 7. NUEVO - Gestión de Gates (VERSIÓN 3)
-gates_frame = tk.LabelFrame(scrollable_frame, text="🚪 Gestión de Gates V3", font=("Arial", 11, "bold"))
-gates_frame.pack(fill="x", padx=5, pady=5)
-gates_frame.columnconfigure(0, weight=1)
-
-button_load_structure = tk.Button(gates_frame, text="Cargar Estructura LEBL", command=load_airport_structure,
-                                  bg="#8e44ad", fg="white", font=("Arial", 10, "bold"), height=2)
-button_load_structure.pack(fill="both", expand=True, padx=5, pady=5)
-
-button_assign_gates = tk.Button(gates_frame, text="Asignar Gates a Vuelos", command=assign_gates_to_flights,
-                                bg="#d35400", fg="white", font=("Arial", 10, "bold"), height=2)
-button_assign_gates.pack(fill="both", expand=True, padx=5, pady=5)
-
-button_gate_status = tk.Button(gates_frame, text="Ver Estado de Gates", command=show_gate_occupancy,
-                               bg="#2980b9", fg="white", font=("Arial", 10, "bold"))
-button_gate_status.pack(fill="x", padx=5, pady=3)
-
-button_plot_gates = tk.Button(gates_frame, text="Visualizar Gates", command=plot_gates_action,
-                              bg="#16a085", fg="white", font=("Arial", 10, "bold"))
-button_plot_gates.pack(fill="x", padx=5, pady=3)
 
 # 7. NUEVO - Gestión de Gates (VERSIÓN 3)
 gates_frame = tk.LabelFrame(scrollable_frame, text="🚪 Gestión de Gates V3", font=("Arial", 11, "bold"))
