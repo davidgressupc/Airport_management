@@ -151,7 +151,7 @@ def LoadAirportStructure(filename):
 
 # ===== IS AIRLINE IN TERMINAL =====
 def IsAirlineInTerminal(terminal, name):
-    """Verifica si una aerolínea está en el terminal"""
+    """Verifica si una aerolínea está en la terminal"""
     if not name or len(name) == 0:
         return False
 

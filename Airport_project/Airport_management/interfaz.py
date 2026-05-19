@@ -3,6 +3,8 @@ from tkinter import messagebox, filedialog
 from airport import *
 from aircraft import *
 from LEBL import *
+import os
+import subprocess
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -10,7 +12,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 airports = []
 aircrafts = []
 bcn = None  # BarcelonaAP
-
 
 # ===== FUNCIONES PARA AEROPORTS =====
 
@@ -155,11 +156,7 @@ def save_schengen_airports():
 
 def load_arrivals_from_file():
     global aircrafts
-    filename = filedialog.askopenfilename(
-        title="Selecciona archivo de vuelos",
-        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
-    )
-
+    filename = "Arrivals_file.txt"
     if filename:
         aircrafts = LoadArrivals(filename)
         if aircrafts:
@@ -368,10 +365,8 @@ def save_flights_action():
 def load_airport_structure():
     """Carga la estructura del aeropuerto (terminales y gates)"""
     global bcn
-    filename = filedialog.askopenfilename(
-        title="Selecciona archivo de estructura del aeropuerto",
-        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
-    )
+    filename = "Terminals.txt"
+
     if filename:
         bcn = LoadAirportStructure(filename)
         if bcn:
@@ -517,10 +512,6 @@ buttonsave.pack(fill="both", expand=True, padx=5, pady=5)
 graph_frame = tk.LabelFrame(scrollable_frame, text="📊 Gráficos Aeroports", font=("Arial", 11, "bold"))
 graph_frame.pack(fill="x", padx=5, pady=5)
 graph_frame.columnconfigure(0, weight=1)
-
-button_plot = tk.Button(graph_frame, text="Mostrar Schengen vs No-Schengen", command=show_plot_schengen,
-                        bg="#e74c3c", fg="white", font=("Arial", 10, "bold"))
-button_plot.pack(fill="x", padx=5, pady=5)
 
 # 3. Frame para Búsqueda/Eliminar Aeroports
 search_frame = tk.LabelFrame(scrollable_frame, text="🔍 Buscar/Eliminar Aeroport", font=("Arial", 11, "bold"))
