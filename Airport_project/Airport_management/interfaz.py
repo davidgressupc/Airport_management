@@ -7,11 +7,16 @@ import os
 import subprocess
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import copy
 
 # ===== VARIABLES GLOBALES =====
 airports = []
 aircrafts = []
+departures = []  # V4
+merged_aircrafts = []  # V4
+night_aircrafts = []  # V4
 bcn = None  # BarcelonaAP
+
 
 # ===== FUNCIONES PARA AEROPORTS =====
 
@@ -126,8 +131,6 @@ def show_google_earth_map():
         messagebox.showerror("Error", "No s'ha pogut generar el mapa")
         return
 
-    import os
-    import subprocess
     try:
         os.startfile(filepath)
     except AttributeError:
@@ -238,8 +241,6 @@ def map_flights_action():
         messagebox.showerror("Error", "No se pudo generar el mapa")
         return
 
-    import os
-    import subprocess
     try:
         os.startfile(filepath)
     except AttributeError:
@@ -250,10 +251,7 @@ def map_flights_action():
     messagebox.showinfo("Éxito", f"Mapa abierto:\n{filepath}")
 
 
-
-
 def long_distance_action():
-
     global aircrafts, airports
     if not aircrafts:
         messagebox.showerror("Error", "No hay vuelos cargados")
@@ -274,8 +272,6 @@ def long_distance_action():
         messagebox.showerror("Error", "No se pudo generar el mapa")
         return
 
-    import os
-    import subprocess
     try:
         os.startfile(filepath)
     except AttributeError:
@@ -286,11 +282,9 @@ def long_distance_action():
     messagebox.showinfo("Éxito",
                         f"Mapa guardado:\n{filepath}\n({len(long_distance_flights)} vuelos de larga distancia)")
 
-#/////////////////////////////////////////EXAMEN:
+
 def non_schengen_action():
-
     """Mostrar solo vuelos NO Schengen en Google Earth"""
-
     global aircrafts, airports
 
     if not aircrafts or not airports:
@@ -301,19 +295,15 @@ def non_schengen_action():
 
     i = 0
     while i < len(aircrafts):
-
         j = 0
         found = False
 
         while j < len(airports) and not found:
-
             airport = airports[j]
 
             if airport.icao_code.upper() == aircrafts[i].origin.upper():
-
                 if airport.schengen == False:
                     non_schengen.append(aircrafts[i])
-
                 found = True
 
             j += 1
@@ -326,12 +316,8 @@ def non_schengen_action():
 
     filepath = MapFlights(non_schengen, airports)
 
-    import os
-    import subprocess
-
     try:
         os.startfile(filepath)
-
     except AttributeError:
         subprocess.Popen(['open', filepath])
 
@@ -339,7 +325,8 @@ def non_schengen_action():
         "Éxito",
         f"{len(non_schengen)} vuelos NO Schengen mostrados"
     )
-#//////////////////////////////////////////////////////////////////////
+
+
 def save_flights_action():
     """Guardar vuelos en archivo"""
     global aircrafts
@@ -492,57 +479,174 @@ def plot_gates_action():
 
     except Exception as e:
         messagebox.showerror("Error", f"Error al visualizar gates: {str(e)}")
-def show_gate_occupancy():
-    """Muestra el estado de los gates"""
-    global bcn
+
+
+# ===== NUEVAS FUNCIONES PARA GATES (VERSIÓN 4) - DEPARTURES =====
+
+def load_departures_from_file():
+    """Cargar vuelos de salida (V4)"""
+    global departures
+    filename = "Departures_file.txt"
+    departures = LoadDepartures(filename)
+
+    if departures:
+        messagebox.showinfo("Éxito", f"{len(departures)} vuelos de salida cargados")
+    else:
+        messagebox.showerror("Error", f"No se pudo cargar el archivo: {filename}")
+
+
+def merge_arrivals_departures():
+    """Fusionar llegadas y salidas (V4)"""
+    global aircrafts, departures, merged_aircrafts
+
+    if not aircrafts:
+        messagebox.showerror("Error", "No hay vuelos de llegada cargados")
+        return
+
+    if not departures:
+        messagebox.showerror("Error", "No hay vuelos de salida cargados")
+        return
+
+    merged_aircrafts, status = MergeMovements(aircrafts, departures)
+
+    if status == 0:
+        messagebox.showinfo("Éxito", f"✓ {len(merged_aircrafts)} vuelos fusionados")
+    else:
+        messagebox.showerror("Error", "No se pudieron fusionar los vuelos")
+
+
+def identify_night_aircraft():
+    """Identificar aviones nocturnos (V4)"""
+    global merged_aircrafts, night_aircrafts
+
+    if not merged_aircrafts:
+        messagebox.showerror("Error", "Primero debes fusionar llegadas y salidas")
+        return
+
+    night_aircrafts, status = NightAircraft(merged_aircrafts)
+
+    if night_aircrafts:
+        message = f"✓ {len(night_aircrafts)} aviones nocturnos detectados:\n\n"
+        i = 0
+        while i < min(10, len(night_aircrafts)):
+            ac = night_aircrafts[i]
+            message += f"  • {ac.aircraft_id} → {ac.destination} ({ac.departure_time})\n"
+            i += 1
+
+        if len(night_aircrafts) > 10:
+            message += f"\n  ... y {len(night_aircrafts) - 10} más"
+
+        messagebox.showinfo("Aviones Nocturnos", message)
+    else:
+        messagebox.showinfo("Info", "No hay aviones nocturnos")
+
+
+def assign_night_gates_action():
+    """Asignar gates a aviones nocturnos (V4)"""
+    global bcn, night_aircrafts
+
     if not bcn:
         messagebox.showerror("Error", "No hay estructura del aeropuerto cargada")
         return
 
-    occupancy = GateOccupancy(bcn)
+    if not night_aircrafts:
+        messagebox.showerror("Error", "Primero identifica los aviones nocturnos")
+        return
 
-    # Contar gates
-    free_gates = 0
-    occupied_gates = 0
+    assigned = AssignNightGates(bcn, night_aircrafts)
 
-    i = 0
-    while i < len(occupancy):
-        if occupancy[i]['status'] == 'Libre':
-            free_gates += 1
-        else:
-            occupied_gates += 1
-        i += 1
-
-    messagebox.showinfo("Estado de Gates",
-                        f"Gates libres: {free_gates}\n"
-                        f"Gates ocupados: {occupied_gates}\n"
-                        f"Total: {len(occupancy)}")
+    if assigned > 0:
+        messagebox.showinfo("Éxito", f"✓ {assigned} aviones nocturnos asignados a gates")
+    else:
+        messagebox.showwarning("Avis", "No se asignaron aviones nocturnos")
 
 
-def plot_gates_action():
-    """Visualiza los gates"""
-    global bcn
+def assign_gates_by_hour_action():
+    """Asignar gates dinámicamente por hora (V4)"""
+    global bcn, merged_aircrafts
+
     if not bcn:
         messagebox.showerror("Error", "No hay estructura del aeropuerto cargada")
         return
 
-    fig, axes = PlotGates(bcn)
-    if fig is None:
+    if not merged_aircrafts:
+        messagebox.showerror("Error", "No hay vuelos fusionados")
         return
 
-    for widget in picture_frame.winfo_children():
-        widget.destroy()
+    # Crear ventana de selección de hora
+    hour_window = tk.Toplevel(root)
+    hour_window.title("Seleccionar Hora")
+    hour_window.geometry("300x150")
+    hour_window.resizable(False, False)
 
-    canvas = FigureCanvasTkAgg(fig, master=picture_frame)
-    canvas.draw()
-    canvas.get_tk_widget().pack(fill="both", expand=True)
+    tk.Label(hour_window, text="Selecciona la hora para asignar gates:", font=("Arial", 10)).pack(pady=10)
+
+    hour_var = tk.StringVar(value="12")
+    hour_spinbox = tk.Spinbox(hour_window, from_=0, to=23, textvariable=hour_var, width=10, font=("Arial", 12))
+    hour_spinbox.pack(pady=10)
+
+    def assign_and_close():
+        global bcn
+        try:
+            hour_int = int(hour_spinbox.get())
+            hour_str = f"{hour_int}:00"
+
+            # Resetear estado inicial - crear copia profunda
+            bcn_reset = copy.deepcopy(bcn)
+
+            # Asignar gates hasta esta hora
+            h = 0
+            while h <= hour_int:
+                AssignGatesAtTime(bcn_reset, merged_aircrafts, f"{h}:00")
+                h += 1
+
+            # Actualizar bcn global
+            bcn = bcn_reset
+
+            messagebox.showinfo("Éxito", f"✓ Gates asignados hasta las {hour_str}")
+            hour_window.destroy()
+            plot_gates_action()
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    tk.Button(hour_window, text="Asignar", command=assign_and_close,
+              bg="#27ae60", fg="white", font=("Arial", 10, "bold"), width=15).pack(pady=10)
+
+
+def plot_day_occupancy_action():
+    """Mostrar ocupación de gates por hora (V4)"""
+    global bcn, merged_aircrafts
+
+    if not bcn:
+        messagebox.showerror("Error", "No hay estructura del aeropuerto cargada")
+        return
+
+    if not merged_aircrafts:
+        messagebox.showerror("Error", "No hay vuelos fusionados")
+        return
+
+    try:
+        fig, ax = PlotDayOccupancy(bcn, merged_aircrafts)
+        if fig is None:
+            messagebox.showerror("Error", "No se pudo generar la gráfica")
+            return
+
+        for widget in picture_frame.winfo_children():
+            widget.destroy()
+
+        canvas = FigureCanvasTkAgg(fig, master=picture_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=True)
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Error al generar gráfica: {str(e)}")
 
 
 # ===== CREAR INTERFAZ GRÁFICA =====
 
 root = tk.Tk()
 root.geometry("1920x1080")
-root.title("Airport Management System v3.0 - UPC Group 9")
+root.title("Airport Management System v4.0 - UPC Group 9")
 
 # Configurar grid
 root.columnconfigure(0, weight=1)
@@ -667,7 +771,7 @@ button_map.pack(fill="x", padx=5, pady=3)
 button_long_dist = tk.Button(graph_flights_frame, text="Larga Distancia >2000km", command=long_distance_action,
                              bg="#f39c12", fg="white", font=("Arial", 9, "bold"))
 button_long_dist.pack(fill="x", padx=5, pady=3)
-#EXÁMEN: ///////////////////////////////////////////7777777777777
+
 button_non_schengen = tk.Button(
     graph_flights_frame,
     text="Mapa vuelos NO Schengen",
@@ -676,10 +780,9 @@ button_non_schengen = tk.Button(
     fg="white",
     font=("Arial", 9, "bold")
 )
-
 button_non_schengen.pack(fill="x", padx=5, pady=3)
 
-# 7. NUEVO - Gestión de Gates (VERSIÓN 3)
+# 7. Frame - Gestión de Gates V3
 gates_frame = tk.LabelFrame(scrollable_frame, text="🚪 Gestión de Gates V3", font=("Arial", 11, "bold"))
 gates_frame.pack(fill="x", padx=5, pady=5)
 gates_frame.columnconfigure(0, weight=1)
@@ -700,6 +803,36 @@ button_plot_gates = tk.Button(gates_frame, text="Visualizar Gates", command=plot
                               bg="#16a085", fg="white", font=("Arial", 10, "bold"), height=2)
 button_plot_gates.pack(fill="both", expand=True, padx=5, pady=5)
 
+# 8. NUEVO - Frame - Gestión de Gates V4 (DEPARTURES)
+gates_frame_v4 = tk.LabelFrame(scrollable_frame, text="🚪 Gestión de Gates V4 (Departures)", font=("Arial", 11, "bold"))
+gates_frame_v4.pack(fill="x", padx=5, pady=5)
+gates_frame_v4.columnconfigure(0, weight=1)
+
+button_load_departures = tk.Button(gates_frame_v4, text="Cargar Salidas (Departures)",
+                                   command=load_departures_from_file,
+                                   bg="#e74c3c", fg="white", font=("Arial", 10, "bold"), height=2)
+button_load_departures.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_merge = tk.Button(gates_frame_v4, text="Fusionar Llegadas + Salidas", command=merge_arrivals_departures,
+                         bg="#3498db", fg="white", font=("Arial", 10, "bold"), height=2)
+button_merge.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_night = tk.Button(gates_frame_v4, text="Identificar Aviones Nocturnos", command=identify_night_aircraft,
+                         bg="#2ecc71", fg="white", font=("Arial", 10, "bold"), height=2)
+button_night.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_assign_night = tk.Button(gates_frame_v4, text="Asignar Gates Nocturnos", command=assign_night_gates_action,
+                                bg="#9b59b6", fg="white", font=("Arial", 10, "bold"), height=2)
+button_assign_night.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_assign_by_hour = tk.Button(gates_frame_v4, text="Asignar Gates por Hora", command=assign_gates_by_hour_action,
+                                  bg="#f39c12", fg="white", font=("Arial", 10, "bold"), height=2)
+button_assign_by_hour.pack(fill="both", expand=True, padx=5, pady=5)
+
+button_plot_occupancy = tk.Button(gates_frame_v4, text="Ocupación Diaria (Gráfica)", command=plot_day_occupancy_action,
+                                  bg="#16a085", fg="white", font=("Arial", 10, "bold"), height=2)
+button_plot_occupancy.pack(fill="both", expand=True, padx=5, pady=5)
+
 # ===== PANEL DERECHO - VISUALIZACIÓN =====
 
 picture_frame = tk.LabelFrame(root, text="📈 Visualización", font=("Arial", 11, "bold"))
@@ -713,4 +846,3 @@ initial_label.pack(expand=True)
 
 # Abrir ventana
 root.mainloop()
-
