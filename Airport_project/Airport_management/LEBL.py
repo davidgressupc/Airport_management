@@ -1,8 +1,13 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from aircraft import Aircraft, TimeToMinutes
-from airport import IsSchengenAirport
+import copy
 
+# SE ELIMINÓ LA IMPORTACIÓN QUE CAUSABA EL BUCLE CON LA INTERFAZ
+from airport import IsSchengenAirport
+from aircraft import Aircraft
+
+
+# ===== CLASES =====
 
 class Gate:
     def __init__(self, name):
@@ -31,7 +36,18 @@ class BarcelonaAP:
         self.terminals = []
 
 
+# ===== FUNCIONES AUXILIARES =====
+
+def TimeToMinutes(time_str):
+    """Convierte un string de hora HH:MM a minutos totales desde las 00:00"""
+    if not time_str or ':' not in time_str:
+        return 0
+    parts = time_str.split(':')
+    return int(parts[0]) * 60 + int(parts[1])
+
+
 # ===== SET GATES =====
+
 def SetGates(area, init_gate, end_gate, prefix):
     """Asigna gates a un boarding area"""
     if end_gate < init_gate:
@@ -49,6 +65,7 @@ def SetGates(area, init_gate, end_gate, prefix):
 
 
 # ===== LOAD AIRLINES =====
+
 def LoadAirlines(terminal, t_name):
     """Carga aerolíneas de un archivo"""
     filename = f"{t_name}_Airlines.txt"
@@ -78,6 +95,7 @@ def LoadAirlines(terminal, t_name):
 
 
 # ===== LOAD AIRPORT STRUCTURE =====
+
 def LoadAirportStructure(filename):
     """Carga la estructura del aeropuerto desde un archivo"""
     try:
@@ -144,6 +162,7 @@ def LoadAirportStructure(filename):
 
 
 # ===== IS AIRLINE IN TERMINAL =====
+
 def IsAirlineInTerminal(terminal, name):
     """Verifica si una aerolínea está en el terminal"""
     if not name or len(name) == 0:
@@ -162,6 +181,7 @@ def IsAirlineInTerminal(terminal, name):
 
 
 # ===== SEARCH TERMINAL =====
+
 def SearchTerminal(bcn, airline_code):
     """Busca en qué terminal está una aerolínea"""
     if not airline_code or len(airline_code) == 0:
@@ -178,6 +198,7 @@ def SearchTerminal(bcn, airline_code):
 
 
 # ===== ASSIGN GATE =====
+
 def AssignGate(bcn, aircraft):
     """Asigna un gate a un vuelo basado en aerolínea y origen Schengen/no-Schengen"""
 
@@ -222,6 +243,7 @@ def AssignGate(bcn, aircraft):
 
 
 # ===== GATE OCCUPANCY =====
+
 def GateOccupancy(bcn):
     """Retorna lista con estado de gates"""
     occupancy_list = []
@@ -258,6 +280,7 @@ def GateOccupancy(bcn):
 
 
 # ===== FREE GATE (V4) =====
+
 def FreeGate(bcn, aircraft_id):
     """Libera el gate ocupado por un avión (V4)"""
     if not aircraft_id:
@@ -288,6 +311,7 @@ def FreeGate(bcn, aircraft_id):
 
 
 # ===== ASSIGN NIGHT GATES (V4) =====
+
 def AssignNightGates(bcn, aircrafts):
     """Asigna gates a aviones nocturnos (solo salida) (V4)"""
     if not aircrafts:
@@ -309,6 +333,7 @@ def AssignNightGates(bcn, aircrafts):
 
 
 # ===== ASSIGN GATES AT TIME (V4) =====
+
 def AssignGatesAtTime(bcn, aircrafts, time_hour):
     """Asigna gates dinámicamente en un periodo horario (V4)"""
 
@@ -348,13 +373,15 @@ def AssignGatesAtTime(bcn, aircrafts, time_hour):
 
 
 # ===== PLOT GATES =====
+
 def PlotGates(bcn):
     """Visualiza los gates del aeropuerto"""
     if not bcn or not bcn.terminals:
         print("Error: No hay estructura de aeropuerto")
         return None, None
 
-    fig, axes = plt.subplots(1, len(bcn.terminals), figsize=(18, 10))
+    # Se usa el hexadecimal '#3498db' directamente para evitar el bucle de importación
+    fig, axes = plt.subplots(1, len(bcn.terminals), figsize=(18, 10), facecolor="#ffffff")
 
     if len(bcn.terminals) == 1:
         axes = [axes]
@@ -378,7 +405,7 @@ def PlotGates(bcn):
             area = terminal.boarding_areas[a]
 
             ax.text(-1.2, y_pos, f"{area.name} ({area.area_type})",
-                    fontsize=11, fontweight='bold', color='#2c3e50')
+                    fontsize=11, fontweight='bold', color='white')
             y_pos -= 0.7
 
             x_pos = 0
@@ -422,14 +449,13 @@ def PlotGates(bcn):
 
 
 # ===== PLOT DAY OCCUPANCY (V4) =====
+
 def PlotDayOccupancy(bcn, aircrafts):
     """Gráfica de ocupación de gates por hora del día (V4)"""
 
     if not bcn or not aircrafts:
         print("Error: No hay datos para la gráfica")
         return None, None
-
-    import copy
 
     hours_data = []
 
@@ -488,3 +514,80 @@ def PlotDayOccupancy(bcn, aircrafts):
     fig.tight_layout()
 
     return fig, ax
+
+
+# =====================================================================
+# ===== NUEVAS FUNCIONES COMPLEMENTARIAS (VERSIÓN 4) =====
+# =====================================================================
+def LoadDepartures(filename):
+    """Carga los vuelos de salida desde el archivo de texto (V4) - Corregido para 4 columnas"""
+    departures_list = []
+    try:
+        with open(filename, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+            if line:
+                parts = line.split()
+
+                if len(parts) == 4:
+                    vuelo = Aircraft(parts[0], parts[3], None, parts[1])
+                    vuelo.departure_time = parts[2]
+                    vuelo.arrival_time = None
+                    departures_list.append(vuelo)
+            i += 1
+        return departures_list
+    except Exception as e:
+        print(f"Error al leer: {e}")
+        return []
+
+def MergeMovements(aircrafts, departures):
+    """Fusiona las listas de llegadas (aircrafts) y salidas (departures) V4"""
+    merged_aircrafts = []
+
+    i = 0
+    while i < len(aircrafts):
+        merged_aircrafts.append(aircrafts[i])
+        i += 1
+
+    j = 0
+    while j < len(departures):
+        merged_aircrafts.append(departures[j])
+        j += 1
+
+    status = 0
+    return merged_aircrafts, status
+
+
+def NightAircraft(merged_aircrafts):
+    """Filtra y extrae los aviones que operan en horario nocturno (23:00 a 06:00) V4"""
+    night_aircrafts = []
+
+    i = 0
+    while i < len(merged_aircrafts):
+        ac = merged_aircrafts[i]
+        is_night = False
+
+        if hasattr(ac, 'aircraft_id') and ac.aircraft_id == "AIRCRAFT":
+            i += 1
+            continue
+
+        if hasattr(ac, 'arrival_time') and ac.arrival_time:
+            hour = int(ac.arrival_time.split(':')[0])
+            if hour >= 23 or hour < 6:
+                is_night = True
+
+        if hasattr(ac, 'departure_time') and ac.departure_time:
+            hour = int(ac.departure_time.split(':')[0])
+            if hour >= 23 or hour < 6:
+                is_night = True
+
+        if is_night:
+            night_aircrafts.append(ac)
+
+        i += 1
+
+    status = 0
+    return night_aircrafts, status
