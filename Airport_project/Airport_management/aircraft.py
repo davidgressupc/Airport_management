@@ -34,7 +34,7 @@ def LoadArrivals(filename):
     try:
         with open(filename, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-            i = 1  # Saltar encabezado
+            i = 1
             while i < len(lines):
                 line = lines[i].strip()
                 if line:
@@ -109,8 +109,6 @@ def MergeMovements(arrivals, departures):
 
     merged = []
     used_departures = set()
-
-    # Copiar todas las llegadas e intentar fusionar
     i = 0
     while i < len(arrivals):
         arrival = arrivals[i]
@@ -161,7 +159,6 @@ def NightAircraft(aircrafts):
     i = 0
     while i < len(aircrafts):
         aircraft = aircrafts[i]
-        # Aircraft es nocturno si no tiene arrival_time pero sí tiene departure_time
         if not aircraft.arrival_time and aircraft.departure_time:
             night_aircrafts.append(aircraft)
         i += 1
@@ -274,7 +271,6 @@ def PlotFlightsType(aircrafts, airports):
                 non_schengen_count += 1
         i += 1
 
-    # Crear gráfica
     fig, ax = plt.subplots(figsize=(10, 6))
 
     ax.bar(['Schengen', 'No-Schengen'], [schengen_count, non_schengen_count],

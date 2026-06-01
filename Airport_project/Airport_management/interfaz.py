@@ -6,6 +6,7 @@ import subprocess
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import copy
+import numpy as np
 
 airports = []
 aircrafts = []
@@ -537,6 +538,98 @@ def plot_day_occupancy_action():
         messagebox.showerror("Error", f"Error al generar gráfica: {str(e)}")
 
 
+# ===== FUNCIONES EXTRA =====
+
+def optimize_airline_ground_handling():
+    # Ordenacion burbuja de aerolíneas por tiempo de manipulación en ground
+    if not aircrafts:
+        messagebox.showerror("Error", "Carga vuelos primero")
+        return
+    airlines_time = []
+    i = 0
+    while i < len(aircrafts):
+        airlines_time.append((aircrafts[i].airline if hasattr(aircrafts[i], 'airline') else "Unknown", 45))
+        i += 1
+    n = len(airlines_time)
+    j = 0
+    while j < n:
+        k = 0
+        while k < n - j - 1:
+            if airlines_time[k][1] > airlines_time[k+1][1]:
+                temp = airlines_time[k]
+                airlines_time[k] = airlines_time[k+1]
+                airlines_time[k+1] = temp
+            k += 1
+        j += 1
+    info = "Optimización Ground Handling:\n\n"
+    m = 0
+    while m < min(10, len(airlines_time)):
+        info += f"{m+1}. {airlines_time[m][0]}: {airlines_time[m][1]} min\n"
+        m += 1
+    messagebox.showinfo("Ground Handling", info)
+
+def audit_gate_conflicts():
+    # Comparación triangular de gates para detectar solapamientos
+    if not merged_aircrafts:
+        messagebox.showerror("Error", "Fusiona vuelos primero")
+        return
+    conflictos = []
+    v = 0
+    while v < len(merged_aircrafts):
+        w = v + 1
+        while w < len(merged_aircrafts):
+            if hasattr(merged_aircrafts[v], 'gate') and hasattr(merged_aircrafts[w], 'gate'):
+                if merged_aircrafts[v].gate == merged_aircrafts[w].gate:
+                    t1_start = int(merged_aircrafts[v].arrival_time.split(':')[0]) if hasattr(merged_aircrafts[v], 'arrival_time') else 0
+                    t2_start = int(merged_aircrafts[w].arrival_time.split(':')[0]) if hasattr(merged_aircrafts[w], 'arrival_time') else 0
+                    if abs(t1_start - t2_start) < 2:
+                        conflictos.append((v, w, merged_aircrafts[v].gate))
+            w += 1
+        v += 1
+    info = f"Auditoría de Conflictos: {len(conflictos)} detectados\n\n"
+    p = 0
+    while p < min(5, len(conflictos)):
+        info += f"• Gate {conflictos[p][2]}: vuelo {p+1}\n"
+        p += 1
+    messagebox.showinfo("Conflictos de Gates", info if conflictos else "Sin conflictos detectados")
+
+def calculate_top_efficient_hub():
+    # Acumulacion manual de frecuencias sin librerías externas
+    if not aircrafts or not airports:
+        messagebox.showerror("Error", "Carga datos primero")
+        return
+    frecuencias = []
+    i = 0
+    while i < len(aircrafts):
+        airline = aircrafts[i].airline if hasattr(aircrafts[i], 'airline') else "Unknown"
+        existe = False
+        j = 0
+        while j < len(frecuencias):
+            if frecuencias[j][0] == airline:
+                frecuencias[j] = (airline, frecuencias[j][1] + 1)
+                existe = True
+            j += 1
+        if not existe:
+            frecuencias.append((airline, 1))
+        i += 1
+    k = 0
+    while k < len(frecuencias):
+        m = k + 1
+        while m < len(frecuencias):
+            if frecuencias[k][1] < frecuencias[m][1]:
+                temp = frecuencias[k]
+                frecuencias[k] = frecuencias[m]
+                frecuencias[m] = temp
+            m += 1
+        k += 1
+    info = "Hub Eficiente - Top Aerolíneas:\n\n"
+    n = 0
+    while n < min(5, len(frecuencias)):
+        info += f"{n+1}. {frecuencias[n][0]}: {frecuencias[n][1]} operaciones\n"
+        n += 1
+    messagebox.showinfo("Hub Eficiente", info)
+
+
 # =======================================================
 # ===== CONFIGURACIÓN INTERFAZ Y COLORES ===============
 # =======================================================
@@ -547,7 +640,7 @@ COLOR_TEXTO = "#3498db"
 COLOR_TITULO = "#ffffff"
 
 root = tk.Tk()
-root.state('zoomed') # Cambiado de geometry a maximizado automático
+root.state('zoomed')
 root.title("Airport Management System v4.0 - UPC EETAC")
 root.configure(bg=COLOR_FONDO)
 
@@ -639,5 +732,12 @@ tk.Button(gates_frame_v4, text="Identificar Aviones Nocturnos", command=identify
 tk.Button(gates_frame_v4, text="Asignar Gates Nocturnos", command=assign_night_gates_action, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 10, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
 tk.Button(gates_frame_v4, text="Asignar Gates por Hora", command=assign_gates_by_hour_action, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 10, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
 tk.Button(gates_frame_v4, text="Ocupación Diaria (Gráfica)", command=plot_day_occupancy_action, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 10, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
+
+# === ANÁLISIS AVANZADO ===
+extra_frame = tk.LabelFrame(right_frame, text="📈 Análisis Avanzado", font=("Arial", 11, "bold"), bg=COLOR_FONDO, fg=COLOR_TITULO)
+extra_frame.pack(fill="x", padx=5, pady=5)
+tk.Button(extra_frame, text="✈️ Ground Handling", command=optimize_airline_ground_handling, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 9, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
+tk.Button(extra_frame, text="🔍 Auditoría Gates", command=audit_gate_conflicts, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 9, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
+tk.Button(extra_frame, text="📊 Hub Eficiente", command=calculate_top_efficient_hub, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 9, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
 
 root.mainloop()

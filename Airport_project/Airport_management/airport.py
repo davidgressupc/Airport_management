@@ -111,7 +111,7 @@ def RemoveAirport(airports, code):
     return -1
 
 
-# ===== STEP 5 - GRÀFICS FÀCILS =====
+# ===== STEP 5 - =====
 def PlotAirports(airports):
     """Mostra una gràfica de barres Schengen vs No-Schengen"""
     if not airports:
@@ -130,7 +130,6 @@ def PlotAirports(airports):
     ax.set_title('Aeroports Schengen vs No Schengen', fontsize=14, fontweight='bold')
     ax.grid(axis='y', alpha=0.3, linestyle='--')
 
-    # Afegim etiquetes a les barres
     i = 0
     counts = [schengen_count, non_schengen_count]
     while i < len(counts):  # Converted for loop to while

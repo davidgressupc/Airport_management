@@ -1,11 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import copy
-
-# SE ELIMINÓ LA IMPORTACIÓN QUE CAUSABA EL BUCLE CON LA INTERFAZ
 from airport import IsSchengenAirport
 from aircraft import Aircraft
-
 
 # ===== CLASES =====
 
@@ -56,7 +53,7 @@ def SetGates(area, init_gate, end_gate, prefix):
     area.gates = []
     i = init_gate
     while i <= end_gate:
-        gate_name = f"{prefix}G{i}"
+        gate_name = f"{prefix}G{i}" ##########3
         gate = Gate(gate_name)
         area.gates.append(gate)
         i += 1
@@ -380,7 +377,6 @@ def PlotGates(bcn):
         print("Error: No hay estructura de aeropuerto")
         return None, None
 
-    # Se usa el hexadecimal '#3498db' directamente para evitar el bucle de importación
     fig, axes = plt.subplots(1, len(bcn.terminals), figsize=(18, 10), facecolor="#ffffff")
 
     if len(bcn.terminals) == 1:

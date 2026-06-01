@@ -1,27 +1,27 @@
 from airport import *
 
-# ===== TEST STEP 1 =====
-print("=== TEST STEP 1: Crear aeroport ===")
+# ===== TEST PASO 1 =====
+print("=== TEST PASO 1: Crear aeropuetos ===")
 ap1 = Airport("LEBL", 41.297445, 2.0832941)
 SetSchengen(ap1)
 PrintAirport(ap1)
 print()
 
-# ===== TEST STEP 3 =====
-print("=== TEST STEP 3: Cargar aeroports ===")
+# ===== TEST PASO 2 =====
+print("=== TEST PASO 2: Cargar aeropuetos ===")
 airports = LoadAirports("airports_file")
-print(f"✓ Carregats {len(airports)} aeroports\n")
+print(f"✓ Carregats {len(airports)} aeropuetos\n")
 
 if len(airports) > 0:
-    print("Primeros 3 aeroports:")
+    print("Primeros 3 aeropuertos:")
     for a in airports[:3]: #cambiar por while
         PrintAirport(a)
     print()
 else:
-    print(" No se cargaron aeroports. Comprueba que airports_file existe.\n")
+    print(" No se cargaron aeropuetos. Comprueba que airports_file existe.\n")
 
 # ===== TEST STEP 4 =====
-print("=== TEST STEP 4: Añadir/Eliminar aeroports ===")
+print("=== TEST STEP 4: Añadir/Eliminar aeropuetos ===")
 if len(airports) > 0:
     new_ap = Airport("LEMD", 40.4667, -3.567)
     SetSchengen(new_ap)
