@@ -567,7 +567,7 @@ tk.Button(file_frame, text="Guardar Aeroports Schengen", command=save_schengen_a
 
 search_frame = tk.LabelFrame(left_frame, text="🔍 Buscar/Eliminar Aeroport", font=("Arial", 11, "bold"), bg=COLOR_FONDO, fg=COLOR_TITULO)
 search_frame.pack(fill="x", padx=5, pady=5)
-tk.Label(search_frame, text="Codi ICAO:", font=("Arial", 9), bg=COLOR_FONDO, fg=COLOR_TEXTO).pack(anchor="w", padx=5, pady=2)
+tk.Label(search_frame, text="Codi ICAO:", font=("Arial", 9), bg=COLOR_FONDO, fg=COLOR_TITULO).pack(anchor="w", padx=5, pady=2)
 entry_search = tk.Entry(search_frame, font=("Arial", 10), bg="#ccd8e3", fg="white", insertbackground="white")
 entry_search.pack(fill="x", padx=5, pady=2)
 tk.Button(search_frame, text="Ver Dades", command=show_airport_data, bg=COLOR_BOTON, fg=COLOR_TEXTO, font=("Arial", 9, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
