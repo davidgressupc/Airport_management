@@ -1554,7 +1554,7 @@
         </Style>
         <Style id="709">
             <IconStyle id="710">
-                <color>ff008000</color>
+                <color>ff0000ff</color>
                 <colorMode>normal</colorMode>
                 <scale>1</scale>
                 <heading>0</heading>
@@ -1565,7 +1565,7 @@
         </Style>
         <Style id="714">
             <IconStyle id="715">
-                <color>ff0000ff</color>
+                <color>ff008000</color>
                 <colorMode>normal</colorMode>
                 <scale>1</scale>
                 <heading>0</heading>
@@ -1609,7 +1609,7 @@
         </Style>
         <Style id="734">
             <IconStyle id="735">
-                <color>ff008000</color>
+                <color>ff0000ff</color>
                 <colorMode>normal</colorMode>
                 <scale>1</scale>
                 <heading>0</heading>
@@ -1631,7 +1631,7 @@
         </Style>
         <Style id="744">
             <IconStyle id="745">
-                <color>ff0000ff</color>
+                <color>ff008000</color>
                 <colorMode>normal</colorMode>
                 <scale>1</scale>
                 <heading>0</heading>
@@ -1664,7 +1664,7 @@
         </Style>
         <Style id="759">
             <IconStyle id="760">
-                <color>ff008000</color>
+                <color>ff0000ff</color>
                 <colorMode>normal</colorMode>
                 <scale>1</scale>
                 <heading>0</heading>
@@ -1895,7 +1895,7 @@
         </Style>
         <Style id="864">
             <IconStyle id="865">
-                <color>ff0000ff</color>
+                <color>ff008000</color>
                 <colorMode>normal</colorMode>
                 <scale>1</scale>
                 <heading>0</heading>
@@ -2825,813 +2825,813 @@ Lon: -5.6561111111111115</description>
             </Point>
         </Placemark>
         <Placemark id="463">
-            <name>LEMD</name>
-            <description>Schengen: SI
-Lat: 40.47222222222222
-Lon: -3.560833333333333</description>
-            <styleUrl>#464</styleUrl>
-            <Point id="462">
-                <coordinates>-3.560833333333333,40.47222222222222,0.0</coordinates>
-            </Point>
-        </Placemark>
-        <Placemark id="468">
             <name>LEMG</name>
             <description>Schengen: SI
 Lat: 36.675
 Lon: -4.4991666666666665</description>
-            <styleUrl>#469</styleUrl>
-            <Point id="467">
+            <styleUrl>#464</styleUrl>
+            <Point id="462">
                 <coordinates>-4.4991666666666665,36.675,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="473">
+        <Placemark id="468">
             <name>LEMH</name>
             <description>Schengen: SI
 Lat: 39.862500000000004
 Lon: 4.2186111111111115</description>
-            <styleUrl>#474</styleUrl>
-            <Point id="472">
+            <styleUrl>#469</styleUrl>
+            <Point id="467">
                 <coordinates>4.2186111111111115,39.862500000000004,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="478">
+        <Placemark id="473">
             <name>LEPA</name>
             <description>Schengen: SI
 Lat: 39.55166666666666
 Lon: 2.738888888888889</description>
-            <styleUrl>#479</styleUrl>
-            <Point id="477">
+            <styleUrl>#474</styleUrl>
+            <Point id="472">
                 <coordinates>2.738888888888889,39.55166666666666,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="483">
+        <Placemark id="478">
             <name>LESO</name>
             <description>Schengen: SI
 Lat: 43.35638888888889
 Lon: -1.7905555555555555</description>
-            <styleUrl>#484</styleUrl>
-            <Point id="482">
+            <styleUrl>#479</styleUrl>
+            <Point id="477">
                 <coordinates>-1.7905555555555555,43.35638888888889,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="488">
+        <Placemark id="483">
             <name>LEST</name>
             <description>Schengen: SI
 Lat: 42.896388888888886
 Lon: -8.415277777777778</description>
-            <styleUrl>#489</styleUrl>
-            <Point id="487">
+            <styleUrl>#484</styleUrl>
+            <Point id="482">
                 <coordinates>-8.415277777777778,42.896388888888886,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="493">
+        <Placemark id="488">
             <name>LEVC</name>
             <description>Schengen: SI
 Lat: 39.489444444444445
 Lon: -0.4816666666666667</description>
-            <styleUrl>#494</styleUrl>
-            <Point id="492">
+            <styleUrl>#489</styleUrl>
+            <Point id="487">
                 <coordinates>-0.4816666666666667,39.489444444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="498">
+        <Placemark id="493">
             <name>LEVD</name>
             <description>Schengen: SI
 Lat: 41.70611111111111
 Lon: -4.851944444444444</description>
-            <styleUrl>#499</styleUrl>
-            <Point id="497">
+            <styleUrl>#494</styleUrl>
+            <Point id="492">
                 <coordinates>-4.851944444444444,41.70611111111111,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="503">
+        <Placemark id="498">
             <name>LEVX</name>
             <description>Schengen: SI
 Lat: 42.22916666666667
 Lon: -8.627500000000001</description>
-            <styleUrl>#504</styleUrl>
-            <Point id="502">
+            <styleUrl>#499</styleUrl>
+            <Point id="497">
                 <coordinates>-8.627500000000001,42.22916666666667,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="508">
+        <Placemark id="503">
             <name>LEXJ</name>
             <description>Schengen: SI
 Lat: 43.426944444444445
 Lon: -3.82</description>
-            <styleUrl>#509</styleUrl>
-            <Point id="507">
+            <styleUrl>#504</styleUrl>
+            <Point id="502">
                 <coordinates>-3.82,43.426944444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="513">
+        <Placemark id="508">
             <name>LEZL</name>
             <description>Schengen: SI
 Lat: 37.418055555555554
 Lon: -5.898888888888888</description>
-            <styleUrl>#514</styleUrl>
-            <Point id="512">
+            <styleUrl>#509</styleUrl>
+            <Point id="507">
                 <coordinates>-5.898888888888888,37.418055555555554,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="518">
+        <Placemark id="513">
             <name>LFBD</name>
             <description>Schengen: SI
 Lat: 44.828611111111115
 Lon: -0.7152777777777777</description>
-            <styleUrl>#519</styleUrl>
-            <Point id="517">
+            <styleUrl>#514</styleUrl>
+            <Point id="512">
                 <coordinates>-0.7152777777777777,44.828611111111115,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="523">
+        <Placemark id="518">
             <name>LFBT</name>
             <description>Schengen: SI
 Lat: 43.18555555555555
 Lon: -0.002777777777777778</description>
-            <styleUrl>#524</styleUrl>
-            <Point id="522">
+            <styleUrl>#519</styleUrl>
+            <Point id="517">
                 <coordinates>-0.002777777777777778,43.18555555555555,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="528">
+        <Placemark id="523">
             <name>LFCK</name>
             <description>Schengen: SI
 Lat: 43.555
 Lon: 2.2905555555555552</description>
-            <styleUrl>#529</styleUrl>
-            <Point id="527">
+            <styleUrl>#524</styleUrl>
+            <Point id="522">
                 <coordinates>2.2905555555555552,43.555,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="533">
+        <Placemark id="528">
             <name>LFLL</name>
             <description>Schengen: SI
 Lat: 45.72555555555556
 Lon: 5.0811111111111105</description>
-            <styleUrl>#534</styleUrl>
-            <Point id="532">
+            <styleUrl>#529</styleUrl>
+            <Point id="527">
                 <coordinates>5.0811111111111105,45.72555555555556,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="538">
+        <Placemark id="533">
             <name>LFMD</name>
             <description>Schengen: SI
 Lat: 43.546388888888885
 Lon: 6.954166666666667</description>
-            <styleUrl>#539</styleUrl>
-            <Point id="537">
+            <styleUrl>#534</styleUrl>
+            <Point id="532">
                 <coordinates>6.954166666666667,43.546388888888885,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="543">
+        <Placemark id="538">
             <name>LFML</name>
             <description>Schengen: SI
 Lat: 43.43666666666666
 Lon: 5.215</description>
-            <styleUrl>#544</styleUrl>
-            <Point id="542">
+            <styleUrl>#539</styleUrl>
+            <Point id="537">
                 <coordinates>5.215,43.43666666666666,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="548">
+        <Placemark id="543">
             <name>LFMN</name>
             <description>Schengen: SI
 Lat: 43.665277777777774
 Lon: 7.215</description>
-            <styleUrl>#549</styleUrl>
-            <Point id="547">
+            <styleUrl>#544</styleUrl>
+            <Point id="542">
                 <coordinates>7.215,43.665277777777774,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="553">
+        <Placemark id="548">
             <name>LFOB</name>
             <description>Schengen: SI
 Lat: 49.45444444444445
 Lon: 2.112777777777778</description>
-            <styleUrl>#554</styleUrl>
-            <Point id="552">
+            <styleUrl>#549</styleUrl>
+            <Point id="547">
                 <coordinates>2.112777777777778,49.45444444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="558">
+        <Placemark id="553">
             <name>LFPG</name>
             <description>Schengen: SI
 Lat: 49.00972222222222
 Lon: 2.5477777777777777</description>
-            <styleUrl>#559</styleUrl>
-            <Point id="557">
+            <styleUrl>#554</styleUrl>
+            <Point id="552">
                 <coordinates>2.5477777777777777,49.00972222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="563">
+        <Placemark id="558">
             <name>LFPO</name>
             <description>Schengen: SI
 Lat: 48.723333333333336
 Lon: 2.3794444444444447</description>
-            <styleUrl>#564</styleUrl>
-            <Point id="562">
+            <styleUrl>#559</styleUrl>
+            <Point id="557">
                 <coordinates>2.3794444444444447,48.723333333333336,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="568">
+        <Placemark id="563">
             <name>LFQQ</name>
             <description>Schengen: SI
 Lat: 50.56333333333333
 Lon: 3.0869444444444447</description>
-            <styleUrl>#569</styleUrl>
-            <Point id="567">
+            <styleUrl>#564</styleUrl>
+            <Point id="562">
                 <coordinates>3.0869444444444447,50.56333333333333,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="573">
+        <Placemark id="568">
             <name>LFRN</name>
             <description>Schengen: SI
 Lat: 48.07194444444445
 Lon: -1.7322222222222223</description>
-            <styleUrl>#574</styleUrl>
-            <Point id="572">
+            <styleUrl>#569</styleUrl>
+            <Point id="567">
                 <coordinates>-1.7322222222222223,48.07194444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="578">
+        <Placemark id="573">
             <name>LFRS</name>
             <description>Schengen: SI
 Lat: 47.15694444444444
 Lon: -1.607777777777778</description>
-            <styleUrl>#579</styleUrl>
-            <Point id="577">
+            <styleUrl>#574</styleUrl>
+            <Point id="572">
                 <coordinates>-1.607777777777778,47.15694444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="583">
+        <Placemark id="578">
             <name>LFSB</name>
             <description>Schengen: SI
 Lat: 47.59
 Lon: 7.529166666666667</description>
-            <styleUrl>#584</styleUrl>
-            <Point id="582">
+            <styleUrl>#579</styleUrl>
+            <Point id="577">
                 <coordinates>7.529166666666667,47.59,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="588">
+        <Placemark id="583">
             <name>LFST</name>
             <description>Schengen: SI
 Lat: 48.54194444444444
 Lon: 7.634444444444444</description>
-            <styleUrl>#589</styleUrl>
-            <Point id="587">
+            <styleUrl>#584</styleUrl>
+            <Point id="582">
                 <coordinates>7.634444444444444,48.54194444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="593">
+        <Placemark id="588">
             <name>LGAV</name>
             <description>Schengen: SI
 Lat: 37.93666666666666
 Lon: 23.944444444444446</description>
-            <styleUrl>#594</styleUrl>
-            <Point id="592">
+            <styleUrl>#589</styleUrl>
+            <Point id="587">
                 <coordinates>23.944444444444446,37.93666666666666,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="598">
+        <Placemark id="593">
             <name>LGIR</name>
             <description>Schengen: SI
 Lat: 35.33972222222222
 Lon: 25.18027777777778</description>
-            <styleUrl>#599</styleUrl>
-            <Point id="597">
+            <styleUrl>#594</styleUrl>
+            <Point id="592">
                 <coordinates>25.18027777777778,35.33972222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="603">
+        <Placemark id="598">
             <name>LGKR</name>
             <description>Schengen: SI
 Lat: 39.60194444444445
 Lon: 19.91222222222222</description>
-            <styleUrl>#604</styleUrl>
-            <Point id="602">
+            <styleUrl>#599</styleUrl>
+            <Point id="597">
                 <coordinates>19.91222222222222,39.60194444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="608">
+        <Placemark id="603">
             <name>LGMK</name>
             <description>Schengen: SI
 Lat: 37.43722222222222
 Lon: 25.34722222222222</description>
-            <styleUrl>#609</styleUrl>
-            <Point id="607">
+            <styleUrl>#604</styleUrl>
+            <Point id="602">
                 <coordinates>25.34722222222222,37.43722222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="613">
+        <Placemark id="608">
             <name>LGSR</name>
             <description>Schengen: SI
 Lat: 36.399166666666666
 Lon: 25.479166666666664</description>
-            <styleUrl>#614</styleUrl>
-            <Point id="612">
+            <styleUrl>#609</styleUrl>
+            <Point id="607">
                 <coordinates>25.479166666666664,36.399166666666666,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="618">
+        <Placemark id="613">
             <name>LGTS</name>
             <description>Schengen: SI
 Lat: 40.51972222222222
 Lon: 22.97083333333333</description>
-            <styleUrl>#619</styleUrl>
-            <Point id="617">
+            <styleUrl>#614</styleUrl>
+            <Point id="612">
                 <coordinates>22.97083333333333,40.51972222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="623">
+        <Placemark id="618">
             <name>LHBP</name>
             <description>Schengen: SI
 Lat: 47.43944444444444
 Lon: 19.261944444444445</description>
-            <styleUrl>#624</styleUrl>
-            <Point id="622">
+            <styleUrl>#619</styleUrl>
+            <Point id="617">
                 <coordinates>19.261944444444445,47.43944444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="628">
+        <Placemark id="623">
             <name>LIBD</name>
             <description>Schengen: SI
 Lat: 41.13805555555555
 Lon: 16.765</description>
-            <styleUrl>#629</styleUrl>
-            <Point id="627">
+            <styleUrl>#624</styleUrl>
+            <Point id="622">
                 <coordinates>16.765,41.13805555555555,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="633">
+        <Placemark id="628">
             <name>LICJ</name>
             <description>Schengen: SI
 Lat: 38.18194444444444
 Lon: 13.099444444444446</description>
-            <styleUrl>#634</styleUrl>
-            <Point id="632">
+            <styleUrl>#629</styleUrl>
+            <Point id="627">
                 <coordinates>13.099444444444446,38.18194444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="638">
+        <Placemark id="633">
             <name>LIEE</name>
             <description>Schengen: SI
 Lat: 39.24722222222222
 Lon: 9.056111111111111</description>
-            <styleUrl>#639</styleUrl>
-            <Point id="637">
+            <styleUrl>#634</styleUrl>
+            <Point id="632">
                 <coordinates>9.056111111111111,39.24722222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="643">
+        <Placemark id="638">
             <name>LIEO</name>
             <description>Schengen: SI
 Lat: 40.89861111111111
 Lon: 9.517777777777779</description>
-            <styleUrl>#644</styleUrl>
-            <Point id="642">
+            <styleUrl>#639</styleUrl>
+            <Point id="637">
                 <coordinates>9.517777777777779,40.89861111111111,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="648">
+        <Placemark id="643">
             <name>LIMC</name>
             <description>Schengen: SI
 Lat: 45.63
 Lon: 8.723055555555556</description>
-            <styleUrl>#649</styleUrl>
-            <Point id="647">
+            <styleUrl>#644</styleUrl>
+            <Point id="642">
                 <coordinates>8.723055555555556,45.63,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="653">
+        <Placemark id="648">
             <name>LIME</name>
             <description>Schengen: SI
 Lat: 45.66888888888889
 Lon: 9.700277777777776</description>
-            <styleUrl>#654</styleUrl>
-            <Point id="652">
+            <styleUrl>#649</styleUrl>
+            <Point id="647">
                 <coordinates>9.700277777777776,45.66888888888889,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="658">
+        <Placemark id="653">
             <name>LIMF</name>
             <description>Schengen: SI
 Lat: 45.2025
 Lon: 7.649444444444444</description>
-            <styleUrl>#659</styleUrl>
-            <Point id="657">
+            <styleUrl>#654</styleUrl>
+            <Point id="652">
                 <coordinates>7.649444444444444,45.2025,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="663">
+        <Placemark id="658">
             <name>LIML</name>
             <description>Schengen: SI
 Lat: 45.44944444444444
 Lon: 9.278333333333334</description>
-            <styleUrl>#664</styleUrl>
-            <Point id="662">
+            <styleUrl>#659</styleUrl>
+            <Point id="657">
                 <coordinates>9.278333333333334,45.44944444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="668">
+        <Placemark id="663">
             <name>LIPE</name>
             <description>Schengen: SI
 Lat: 44.530833333333334
 Lon: 11.296944444444444</description>
-            <styleUrl>#669</styleUrl>
-            <Point id="667">
+            <styleUrl>#664</styleUrl>
+            <Point id="662">
                 <coordinates>11.296944444444444,44.530833333333334,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="673">
+        <Placemark id="668">
             <name>LIPH</name>
             <description>Schengen: SI
 Lat: 45.65083333333333
 Lon: 12.197777777777778</description>
-            <styleUrl>#674</styleUrl>
-            <Point id="672">
+            <styleUrl>#669</styleUrl>
+            <Point id="667">
                 <coordinates>12.197777777777778,45.65083333333333,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="678">
+        <Placemark id="673">
             <name>LIPX</name>
             <description>Schengen: SI
 Lat: 45.396388888888886
 Lon: 10.887777777777778</description>
-            <styleUrl>#679</styleUrl>
-            <Point id="677">
+            <styleUrl>#674</styleUrl>
+            <Point id="672">
                 <coordinates>10.887777777777778,45.396388888888886,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="683">
+        <Placemark id="678">
             <name>LIPZ</name>
             <description>Schengen: SI
 Lat: 45.50527777777778
 Lon: 12.351944444444444</description>
-            <styleUrl>#684</styleUrl>
-            <Point id="682">
+            <styleUrl>#679</styleUrl>
+            <Point id="677">
                 <coordinates>12.351944444444444,45.50527777777778,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="688">
+        <Placemark id="683">
             <name>LIRF</name>
             <description>Schengen: SI
 Lat: 41.80027777777777
 Lon: 12.238888888888889</description>
-            <styleUrl>#689</styleUrl>
-            <Point id="687">
+            <styleUrl>#684</styleUrl>
+            <Point id="682">
                 <coordinates>12.238888888888889,41.80027777777777,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="693">
+        <Placemark id="688">
             <name>LIRN</name>
             <description>Schengen: SI
 Lat: 40.88444444444444
 Lon: 14.290833333333333</description>
-            <styleUrl>#694</styleUrl>
-            <Point id="692">
+            <styleUrl>#689</styleUrl>
+            <Point id="687">
                 <coordinates>14.290833333333333,40.88444444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="698">
+        <Placemark id="693">
             <name>LIRP</name>
             <description>Schengen: SI
 Lat: 43.68277777777777
 Lon: 10.395555555555555</description>
-            <styleUrl>#699</styleUrl>
-            <Point id="697">
+            <styleUrl>#694</styleUrl>
+            <Point id="692">
                 <coordinates>10.395555555555555,43.68277777777777,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="703">
+        <Placemark id="698">
             <name>LIRQ</name>
             <description>Schengen: SI
 Lat: 43.808611111111105
 Lon: 11.202777777777778</description>
-            <styleUrl>#704</styleUrl>
-            <Point id="702">
+            <styleUrl>#699</styleUrl>
+            <Point id="697">
                 <coordinates>11.202777777777778,43.808611111111105,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="708">
+        <Placemark id="703">
             <name>LKPR</name>
             <description>Schengen: SI
 Lat: 50.100833333333334
 Lon: 14.26</description>
-            <styleUrl>#709</styleUrl>
-            <Point id="707">
+            <styleUrl>#704</styleUrl>
+            <Point id="702">
                 <coordinates>14.26,50.100833333333334,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="713">
+        <Placemark id="708">
             <name>LLBG</name>
             <description>Schengen: NO
 Lat: 32.00944444444445
 Lon: 34.885555555555555</description>
-            <styleUrl>#714</styleUrl>
-            <Point id="712">
+            <styleUrl>#709</styleUrl>
+            <Point id="707">
                 <coordinates>34.885555555555555,32.00944444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="718">
+        <Placemark id="713">
             <name>LMML</name>
             <description>Schengen: SI
 Lat: 35.8575
 Lon: 14.477500000000001</description>
-            <styleUrl>#719</styleUrl>
-            <Point id="717">
+            <styleUrl>#714</styleUrl>
+            <Point id="712">
                 <coordinates>14.477500000000001,35.8575,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="723">
+        <Placemark id="718">
             <name>LOWW</name>
             <description>Schengen: SI
 Lat: 48.11027777777778
 Lon: 16.56972222222222</description>
-            <styleUrl>#724</styleUrl>
-            <Point id="722">
+            <styleUrl>#719</styleUrl>
+            <Point id="717">
                 <coordinates>16.56972222222222,48.11027777777778,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="728">
+        <Placemark id="723">
             <name>LPPR</name>
             <description>Schengen: SI
 Lat: 41.23555555555556
 Lon: -8.678055555555554</description>
-            <styleUrl>#729</styleUrl>
-            <Point id="727">
+            <styleUrl>#724</styleUrl>
+            <Point id="722">
                 <coordinates>-8.678055555555554,41.23555555555556,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="733">
+        <Placemark id="728">
             <name>LPPT</name>
             <description>Schengen: SI
 Lat: 38.774166666666666
 Lon: -9.134166666666665</description>
-            <styleUrl>#734</styleUrl>
-            <Point id="732">
+            <styleUrl>#729</styleUrl>
+            <Point id="727">
                 <coordinates>-9.134166666666665,38.774166666666666,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="738">
+        <Placemark id="733">
             <name>LRCL</name>
             <description>Schengen: NO
 Lat: 46.78916666666667
 Lon: 23.692222222222224</description>
-            <styleUrl>#739</styleUrl>
-            <Point id="737">
+            <styleUrl>#734</styleUrl>
+            <Point id="732">
                 <coordinates>23.692222222222224,46.78916666666667,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="743">
+        <Placemark id="738">
             <name>LROP</name>
             <description>Schengen: NO
 Lat: 44.571111111111115
 Lon: 26.084999999999997</description>
-            <styleUrl>#744</styleUrl>
-            <Point id="742">
+            <styleUrl>#739</styleUrl>
+            <Point id="737">
                 <coordinates>26.084999999999997,44.571111111111115,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="748">
+        <Placemark id="743">
             <name>LSGG</name>
             <description>Schengen: SI
 Lat: 46.23833333333334
 Lon: 6.109444444444444</description>
-            <styleUrl>#749</styleUrl>
-            <Point id="747">
+            <styleUrl>#744</styleUrl>
+            <Point id="742">
                 <coordinates>6.109444444444444,46.23833333333334,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="753">
+        <Placemark id="748">
             <name>LSZG</name>
             <description>Schengen: SI
 Lat: 47.18138888888889
 Lon: 7.416388888888889</description>
-            <styleUrl>#754</styleUrl>
-            <Point id="752">
+            <styleUrl>#749</styleUrl>
+            <Point id="747">
                 <coordinates>7.416388888888889,47.18138888888889,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="758">
+        <Placemark id="753">
             <name>LSZH</name>
             <description>Schengen: SI
 Lat: 47.45805555555556
 Lon: 8.548055555555555</description>
-            <styleUrl>#759</styleUrl>
-            <Point id="757">
+            <styleUrl>#754</styleUrl>
+            <Point id="752">
                 <coordinates>8.548055555555555,47.45805555555556,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="763">
+        <Placemark id="758">
             <name>LTBA</name>
             <description>Schengen: NO
 Lat: 40.976111111111116
 Lon: 28.81416666666667</description>
-            <styleUrl>#764</styleUrl>
-            <Point id="762">
+            <styleUrl>#759</styleUrl>
+            <Point id="757">
                 <coordinates>28.81416666666667,40.976111111111116,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="768">
+        <Placemark id="763">
             <name>LTFJ</name>
             <description>Schengen: NO
 Lat: 40.89833333333333
 Lon: 29.309166666666666</description>
-            <styleUrl>#769</styleUrl>
-            <Point id="767">
+            <styleUrl>#764</styleUrl>
+            <Point id="762">
                 <coordinates>29.309166666666666,40.89833333333333,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="773">
+        <Placemark id="768">
             <name>LUKK</name>
             <description>Schengen: NO
 Lat: 46.92777777777778
 Lon: 28.930833333333336</description>
-            <styleUrl>#774</styleUrl>
-            <Point id="772">
+            <styleUrl>#769</styleUrl>
+            <Point id="767">
                 <coordinates>28.930833333333336,46.92777777777778,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="778">
+        <Placemark id="773">
             <name>LWSK</name>
             <description>Schengen: NO
 Lat: 41.961666666666666
 Lon: 21.62138888888889</description>
-            <styleUrl>#779</styleUrl>
-            <Point id="777">
+            <styleUrl>#774</styleUrl>
+            <Point id="772">
                 <coordinates>21.62138888888889,41.961666666666666,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="783">
+        <Placemark id="778">
             <name>LYBE</name>
             <description>Schengen: NO
 Lat: 44.81944444444445
 Lon: 20.306944444444444</description>
-            <styleUrl>#784</styleUrl>
-            <Point id="782">
+            <styleUrl>#779</styleUrl>
+            <Point id="777">
                 <coordinates>20.306944444444444,44.81944444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="788">
+        <Placemark id="783">
             <name>LYTV</name>
             <description>Schengen: NO
 Lat: 42.40472222222222
 Lon: 18.723333333333333</description>
-            <styleUrl>#789</styleUrl>
-            <Point id="787">
+            <styleUrl>#784</styleUrl>
+            <Point id="782">
                 <coordinates>18.723333333333333,42.40472222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="793">
+        <Placemark id="788">
             <name>OLBA</name>
             <description>Schengen: NO
 Lat: 33.81916666666667
 Lon: 35.49</description>
-            <styleUrl>#794</styleUrl>
-            <Point id="792">
+            <styleUrl>#789</styleUrl>
+            <Point id="787">
                 <coordinates>35.49,33.81916666666667,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="798">
+        <Placemark id="793">
             <name>OMAA</name>
             <description>Schengen: NO
 Lat: 24.433333333333334
 Lon: 54.65</description>
-            <styleUrl>#799</styleUrl>
-            <Point id="797">
+            <styleUrl>#794</styleUrl>
+            <Point id="792">
                 <coordinates>54.65,24.433333333333334,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="803">
+        <Placemark id="798">
             <name>OMDB</name>
             <description>Schengen: NO
 Lat: 25.249166666666667
 Lon: 55.36</description>
-            <styleUrl>#804</styleUrl>
-            <Point id="802">
+            <styleUrl>#799</styleUrl>
+            <Point id="797">
                 <coordinates>55.36,25.249166666666667,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="808">
+        <Placemark id="803">
             <name>OTHH</name>
             <description>Schengen: NO
 Lat: 25.274444444444445
 Lon: 51.608333333333334</description>
-            <styleUrl>#809</styleUrl>
-            <Point id="807">
+            <styleUrl>#804</styleUrl>
+            <Point id="802">
                 <coordinates>51.608333333333334,25.274444444444445,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="813">
+        <Placemark id="808">
             <name>SAEZ</name>
             <description>Schengen: NO
 Lat: -34.82222222222222
 Lon: -58.53583333333333</description>
-            <styleUrl>#814</styleUrl>
-            <Point id="812">
+            <styleUrl>#809</styleUrl>
+            <Point id="807">
                 <coordinates>-58.53583333333333,-34.82222222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="818">
+        <Placemark id="813">
             <name>SBGR</name>
             <description>Schengen: NO
 Lat: -23.433333333333334
 Lon: -46.47</description>
-            <styleUrl>#819</styleUrl>
-            <Point id="817">
+            <styleUrl>#814</styleUrl>
+            <Point id="812">
                 <coordinates>-46.47,-23.433333333333334,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="823">
+        <Placemark id="818">
             <name>SKBO</name>
             <description>Schengen: NO
 Lat: 4.7
 Lon: -74.15</description>
-            <styleUrl>#824</styleUrl>
-            <Point id="822">
+            <styleUrl>#819</styleUrl>
+            <Point id="817">
                 <coordinates>-74.15,4.7,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="828">
+        <Placemark id="823">
             <name>UKBB</name>
             <description>Schengen: NO
 Lat: 50.344722222222224
 Lon: 30.893333333333334</description>
-            <styleUrl>#829</styleUrl>
-            <Point id="827">
+            <styleUrl>#824</styleUrl>
+            <Point id="822">
                 <coordinates>30.893333333333334,50.344722222222224,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="833">
+        <Placemark id="828">
             <name>UKKK</name>
             <description>Schengen: NO
 Lat: 50.401944444444446
 Lon: 30.451944444444443</description>
-            <styleUrl>#834</styleUrl>
-            <Point id="832">
+            <styleUrl>#829</styleUrl>
+            <Point id="827">
                 <coordinates>30.451944444444443,50.401944444444446,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="838">
+        <Placemark id="833">
             <name>ULLI</name>
             <description>Schengen: NO
 Lat: 59.80027777777777
 Lon: 30.2625</description>
-            <styleUrl>#839</styleUrl>
-            <Point id="837">
+            <styleUrl>#834</styleUrl>
+            <Point id="832">
                 <coordinates>30.2625,59.80027777777777,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="843">
+        <Placemark id="838">
             <name>URKK</name>
             <description>Schengen: NO
 Lat: 45.03472222222222
 Lon: 39.169999999999995</description>
-            <styleUrl>#844</styleUrl>
-            <Point id="842">
+            <styleUrl>#839</styleUrl>
+            <Point id="837">
                 <coordinates>39.169999999999995,45.03472222222222,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="848">
+        <Placemark id="843">
             <name>UUDD</name>
             <description>Schengen: NO
 Lat: 55.40861111111111
 Lon: 37.906388888888884</description>
-            <styleUrl>#849</styleUrl>
-            <Point id="847">
+            <styleUrl>#844</styleUrl>
+            <Point id="842">
                 <coordinates>37.906388888888884,55.40861111111111,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="853">
+        <Placemark id="848">
             <name>UUEE</name>
             <description>Schengen: NO
 Lat: 55.972500000000004
 Lon: 37.41305555555555</description>
-            <styleUrl>#854</styleUrl>
-            <Point id="852">
+            <styleUrl>#849</styleUrl>
+            <Point id="847">
                 <coordinates>37.41305555555555,55.972500000000004,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="858">
+        <Placemark id="853">
             <name>UWKD</name>
             <description>Schengen: NO
 Lat: 55.606944444444444
 Lon: 49.280277777777776</description>
-            <styleUrl>#859</styleUrl>
-            <Point id="857">
+            <styleUrl>#854</styleUrl>
+            <Point id="852">
                 <coordinates>49.280277777777776,55.606944444444444,0.0</coordinates>
             </Point>
         </Placemark>
-        <Placemark id="863">
+        <Placemark id="858">
             <name>WSSS</name>
             <description>Schengen: NO
 Lat: 1.3591666666666669
 Lon: 103.98916666666666</description>
+            <styleUrl>#859</styleUrl>
+            <Point id="857">
+                <coordinates>103.98916666666666,1.3591666666666669,0.0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark id="863">
+            <name>LEMD</name>
+            <description>Schengen: SI
+Lat: 40.4235
+Lon: 31.457435</description>
             <styleUrl>#864</styleUrl>
             <Point id="862">
-                <coordinates>103.98916666666666,1.3591666666666669,0.0</coordinates>
+                <coordinates>31.457435,40.4235,0.0</coordinates>
             </Point>
         </Placemark>
     </Document>
