@@ -17,7 +17,7 @@ merged_aircrafts = []
 night_aircrafts = []
 bcn = None
 
-
+# Funcio per cargar aeroports
 def load_airports_from_file():
     global airports
     filename = "airports_file.txt"
@@ -27,13 +27,14 @@ def load_airports_from_file():
     else:
         messagebox.showerror("Error", f"No s'ha trobat el fitxer: {filename}")
 
-
+# Funcio per afegir aeroport
 def add_airport_manual():
     global airports
     code_entry = entry_code.get()
     try:
-        lat = float(entry_lat.get())
+
         lon = float(entry_lon.get())
+        lay = float(entry_lon.get())
         if not code_entry:
             messagebox.showerror("Error", "Codi ICAO requerit")
             return
@@ -53,7 +54,7 @@ def add_airport_manual():
     except ValueError:
         messagebox.showerror("Error", "Latitud i Longitud han de ser nombres")
 
-
+# Funcio per eliminar aeroport
 def delete_airport_action():
     global airports
     code = entry_search.get()
@@ -67,7 +68,7 @@ def delete_airport_action():
     else:
         messagebox.showerror("Error", f"Aeroport {code} no trobat")
 
-
+# Funcio per ensenyar dades del aeroport
 def show_airport_data():
     global airports
     code = entry_search.get()
@@ -84,7 +85,7 @@ def show_airport_data():
         i += 1
     messagebox.showerror("Error", f"Aeroport {code} no trobat")
 
-
+# Funcio per ensenyar grafic schengen vs no shcengen
 def show_plot_schengen():
     global airports
     if not airports:
@@ -105,7 +106,7 @@ def show_plot_schengen():
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
-
+# Funcio per google earth
 def show_google_earth_map():
     global airports
     if not airports:
@@ -136,7 +137,7 @@ def save_schengen_airports():
         messagebox.showerror("Error", "No hi ha aeroports Schengen")
 
 
-# ===== FUNCIONES PARA VUELOS =====
+# Cargar vuelos a partir de archivo
 
 def load_arrivals_from_file():
     from aircraft import LoadArrivals
@@ -149,7 +150,7 @@ def load_arrivals_from_file():
         else:
             messagebox.showerror("Error", "No se pudieron cargar vuelos del archivo")
 
-
+# Funcio per grafic arrivals
 def plot_arrivals_action():
     from aircraft import PlotArrivals
     global aircrafts
@@ -171,7 +172,7 @@ def plot_arrivals_action():
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
-
+# Funcio per grafic aerolineas
 def plot_airlines_action():
     from aircraft import PlotAirlines
     global aircrafts
@@ -193,7 +194,7 @@ def plot_airlines_action():
     canvas.draw()
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
-
+# Funcio per vols per hora
 def plot_flights_type_action():
     from aircraft import PlotFlightsType
     global aircrafts
@@ -313,7 +314,7 @@ def save_flights_action():
             messagebox.showerror("Error", "No se pudieron guardar los vuelos")
 
 
-# ===== FUNCIONES PARA GATES (V3) =====
+# Funcions per les gates
 
 def load_airport_structure():
     from LEBL import LoadAirportStructure
@@ -426,7 +427,7 @@ def plot_gates_action():
         messagebox.showerror("Error", f"Error al visualizar gates: {str(e)}")
 
 
-# ===== FUNCIONES PARA GATES (V4) =====
+# cargar salidas a partir de archivo
 
 def load_departures_from_file():
     from LEBL import LoadDepartures
@@ -564,7 +565,7 @@ def plot_day_occupancy_action():
         messagebox.showerror("Error", f"Error al generar gráfica: {str(e)}")
 
 
-# ===== GESTIÓN DE EMERGENCIAS =====
+# Función para las emergencias
 
 def declare_emergency_flight_window():
     if not bcn:
@@ -643,10 +644,10 @@ def declare_emergency_flight_window():
               bg="white", fg="#962d2d", font=("Arial", 10, "bold"), relief="flat").pack(pady=5)
 
 
-# ===== NUEVA FUNCIÓN: CONSULTA EN TIEMPO REAL METAR LEBL =====
+# Funció per consultar dades en temps real
 
 def fetch_live_metar_lebl():
-    # URL de la API oficial de la NOAA (Servicio Meteorológico de Aviación) para LEBL
+
     url = "https://aviationweather.gov/api/data/metar?ids=LEBL&format=json"
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -660,7 +661,7 @@ def fetch_live_metar_lebl():
             viento_vel = data[0].get('wspd', 'N/A')
             elevacion = data[0].get('elev', 'N/A')
 
-            # Formatear el informe de manera súper visual
+            # Formatear el informe de manera visual
             metar_report = tk.Toplevel(root)
             metar_report.title("METAR en tiempo real - LEBL")
             metar_report.geometry("420x240")
@@ -670,14 +671,14 @@ def fetch_live_metar_lebl():
             tk.Label(metar_report, text="✈️ TORRE DE CONTROL LEBL: METAR ACTUAL ✈️",
                      font=("Arial", 10, "bold"), bg="#1e272e", fg="#00d2d3").pack(pady=10)
 
-            # Cuadro para el texto crudo (el string aeronáutico oficial)
+            # Cuadro para el texto
             raw_text_box = tk.Text(metar_report, font=("Courier New", 10, "bold"), height=2, width=45, bg="#2f3640",
                                    fg="#4cd137", bd=0, padx=5, pady=5)
             raw_text_box.insert(tk.END, metar_raw)
             raw_text_box.config(state=tk.DISABLED)
             raw_text_box.pack(pady=5)
 
-            # Datos traducidos limpios
+            # Datos limpios
             decoded_info = f"📊 DATOS DE LOS SENSORES EN DIRECTO:\n\n" \
                            f"• Temperatura en pista: {temp} °C\n" \
                            f"• Dirección del viento: {viento_dir}°\n" \
@@ -692,9 +693,7 @@ def fetch_live_metar_lebl():
         messagebox.showerror("Error de Red", f"No se pudo conectar al servidor meteorológico:\n{str(e)}")
 
 
-# =======================================================
-# ===== CONFIGURACIÓN INTERFAZ Y COLORES ===============
-# =======================================================
+# Configuración interfaz
 
 COLOR_FONDO = "#3498db"
 COLOR_BOTON = "#ffffff"
@@ -711,7 +710,7 @@ root.columnconfigure(1, weight=1)
 root.columnconfigure(2, weight=0, minsize=270)
 root.rowconfigure(0, weight=1)
 
-# === COLUMNA 1 (IZQUIERDA) ===
+# Columna 1
 left_frame = tk.Frame(root, bg=COLOR_FONDO, width=260)
 left_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsw")
 
@@ -773,7 +772,7 @@ except Exception:
     tk.Label(logo_frame, text="UPC - EETAC", font=("Arial", 10, "bold"), fg="#7f8c8d", bg=COLOR_FONDO).pack(anchor="n",
                                                                                                             pady=0)
 
-# === COLUMNA 2 (CENTRO - CON DOS BOTONES COMPARTIDOS ABAJO) ===
+# Columna 2
 center_frame = tk.Frame(root, bg=COLOR_FONDO)
 center_frame.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
 center_frame.rowconfigure(0, weight=1)
@@ -806,7 +805,7 @@ btn_metar = tk.Button(extra_frame, text="🌤️ Actualizar METAR LEBL (Tiempo R
                       relief="flat")
 btn_metar.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
 
-# === COLUMNA 3 (DERECHA) ===
+# Columna 3
 right_frame = tk.Frame(root, bg=COLOR_FONDO, width=260)
 right_frame.grid(row=0, column=2, padx=5, pady=5, sticky="nse")
 
@@ -858,4 +857,4 @@ tk.Button(gates_frame_v4, text="Asignar Gates por Hora", command=assign_gates_by
 tk.Button(gates_frame_v4, text="Ocupación Diaria (Gráfica)", command=plot_day_occupancy_action, bg=COLOR_BOTON,
           fg=COLOR_TEXTO, font=("Arial", 10, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
 
-root.mainloop()º
+root.mainloop()
