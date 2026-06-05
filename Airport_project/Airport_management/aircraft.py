@@ -15,7 +15,7 @@ class Aircraft:
         self.departure_time = departure_time  # Format hh:mm (V4)
 
 
-# ===== UTILITY FUNCTION: CONVERT TIME TO MINUTES =====
+# Funcion para pasar de tiempo de horas a minutos
 def TimeToMinutes(time_str):
     """Convierte tiempo en formato hh:mm a minutos desde medianoche"""
     try:
@@ -27,7 +27,7 @@ def TimeToMinutes(time_str):
         return -1
 
 
-# ===== LOAD ARRIVALS =====
+# Per carregar les arrivals
 def LoadArrivals(filename):
     """Carga vuelos del archivo de llegadas"""
     aircrafts = []
@@ -65,7 +65,7 @@ def LoadArrivals(filename):
     return aircrafts
 
 
-# ===== LOAD DEPARTURES (V4) =====
+# Per carregar les sortides
 def LoadDepartures(filename):
     """Carga vuelos de salida desde un archivo (V4)"""
     departures = []
@@ -101,7 +101,7 @@ def LoadDepartures(filename):
     return departures
 
 
-# ===== MERGE MOVEMENTS (V4) =====
+# barrejar tots els vols que faran servir gates
 def MergeMovements(arrivals, departures):
     """Fusiona llegadas y salidas del mismo avión si los tiempos son compatibles (V4)"""
     if not arrivals or not departures:
@@ -119,7 +119,7 @@ def MergeMovements(arrivals, departures):
             arrival_time=arrival.arrival_time
         )
 
-        # Buscar salida correspondiente
+        # Buscar salida
         j = 0
         while j < len(departures):
             departure = departures[j]
@@ -139,7 +139,7 @@ def MergeMovements(arrivals, departures):
         merged.append(merged_aircraft)
         i += 1
 
-    # Agregar salidas que no tuvieron llegada (aviones nocturnos)
+    # Afegir salidas que no tenian llegada (aviones nocturnos)
     j = 0
     while j < len(departures):
         if j not in used_departures:
@@ -148,10 +148,9 @@ def MergeMovements(arrivals, departures):
 
     return merged, 0
 
-
-# ===== NIGHT AIRCRAFT (V4) =====
+#Retorna lista de aviones que solo tienen información de salida (els de abans)
 def NightAircraft(aircrafts):
-    """Retorna lista de aviones que solo tienen información de salida (aviones nocturnos) (V4)"""
+
     if not aircrafts:
         return [], -1
 
@@ -166,14 +165,14 @@ def NightAircraft(aircrafts):
     return night_aircrafts, 0
 
 
-# ===== PLOT ARRIVALS =====
+# plot dels arrivals
 def PlotArrivals(aircrafts):
     """Gráfica de llegadas por hora"""
     if not aircrafts:
         print("Error: No hay vuelos para mostrar")
         return None, None
 
-    # Contar llegadas por hora
+    # contar llegadas por hora
     hours = {}
     i = 0
     while i < len(aircrafts):
@@ -212,7 +211,7 @@ def PlotArrivals(aircrafts):
     return fig, ax
 
 
-# ===== PLOT AIRLINES =====
+# Ploteja grafic de aerolineas
 def PlotAirlines(aircrafts):
     """Gráfica de vuelos por aerolínea"""
     if not aircrafts:
@@ -251,9 +250,8 @@ def PlotAirlines(aircrafts):
     return fig, ax
 
 
-# ===== PLOT FLIGHTS TYPE =====
+# Ploteja tipus de vol (shengen o no shengen)
 def PlotFlightsType(aircrafts, airports):
-    """Gráfica Schengen vs No-Schengen"""
     if not aircrafts or not airports:
         print("Error: No hay datos para mostrar")
         return None, None
@@ -288,9 +286,8 @@ def PlotFlightsType(aircrafts, airports):
     return fig, ax
 
 
-# ===== HAVERSINE DISTANCE =====
+# calcula distancia en km
 def HaversineDistance(lat1, lon1, lat2, lon2):
-    """Calcula distancia entre dos coordenadas en km"""
     lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
 
     dlat = lat2 - lat1
@@ -303,7 +300,7 @@ def HaversineDistance(lat1, lon1, lat2, lon2):
     return c * r
 
 
-# ===== LONG DISTANCE ARRIVALS =====
+# selecciona vol de llarga distancias
 def LongDistanceArrivals(aircrafts, airports):
     """Retorna vuelos de larga distancia (>2000 km)"""
     long_distance = []
@@ -336,9 +333,9 @@ def LongDistanceArrivals(aircrafts, airports):
     return long_distance
 
 
-# ===== MAP FLIGHTS =====
+# crear mapa amb trajectories de vols
 def MapFlights(aircrafts, airports):
-    """Crea mapa KML con trayectorias de vuelos"""
+
     if not aircrafts or not airports:
         print("Error: No hay datos para generar mapa")
         return None
@@ -392,7 +389,7 @@ def MapFlights(aircrafts, airports):
     return filepath
 
 
-# ===== SAVE FLIGHTS =====
+# Guardar vuelos
 def SaveFlights(aircrafts, filename):
     """Guarda vuelos en archivo"""
     if not aircrafts:
@@ -417,7 +414,7 @@ def SaveFlights(aircrafts, filename):
         return -1
 
 
-# ===== TEST SECTION =====
+# per provar (chatgpt)
 if __name__ == "__main__":
     print("=== TEST AIRCRAFT.PY (V4) ===\n")
 

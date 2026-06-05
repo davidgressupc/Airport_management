@@ -1,13 +1,11 @@
 from airport import *
 
-# ===== TEST PASO 1 =====
 print("=== TEST PASO 1: Crear aeropuetos ===")
 ap1 = Airport("LEBL", 41.297445, 2.0832941)
 SetSchengen(ap1)
 PrintAirport(ap1)
 print()
 
-# ===== TEST PASO 2 =====
 print("=== TEST PASO 2: Cargar aeropuetos ===")
 airports = LoadAirports("airports_file")
 print(f"✓ Carregats {len(airports)} aeropuetos\n")
@@ -20,7 +18,6 @@ if len(airports) > 0:
 else:
     print(" No se cargaron aeropuetos. Comprueba que airports_file existe.\n")
 
-# ===== TEST STEP 4 =====
 print("=== TEST STEP 4: Añadir/Eliminar aeropuetos ===")
 if len(airports) > 0:
     new_ap = Airport("LEMD", 40.4667, -3.567)
@@ -34,7 +31,6 @@ if len(airports) > 0:
     result3 = SaveSchengenAirports(airports, "schengen_airports.txt")
     print(f"✓ Aeroports Schengen guardados: {result3} aeroports\n")
 
-# ===== TEST STEP 5 GRÁFICOS =====
 if len(airports) > 0:
     print("=== TEST STEP 5: Gráficos ===")
     print(" Abriendo gráfica...")

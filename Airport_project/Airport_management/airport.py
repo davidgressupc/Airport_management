@@ -9,9 +9,8 @@ class Airport:
         self.schengen = False
 
 
-# ===== STEP 1 =====
+#comprobar si un aeroport és shengen pel file
 def IsSchengenAirport(code):
-    """Comprova si un aeroport és Schengen per el codi ICAO"""
     if not code or len(code) < 2:
         return False
     schengen_prefixes = {
@@ -21,33 +20,30 @@ def IsSchengenAirport(code):
     return code[:2].upper() in schengen_prefixes
 
 
+#estbleix un aeroport com a shengen
 def SetSchengen(airport):
-    """Estableix si l'aeroport és Schengen"""
     airport.schengen = IsSchengenAirport(airport.icao_code)
 
-
+#busca dades aeroport
 def PrintAirport(airport):
-    """Mostra les dades de l'aeroport"""
     print(
         f"Codi: {airport.icao_code} | Lat: {airport.latitude:.4f} | Lon: {airport.longitude:.4f} | Schengen: {airport.schengen}")
 
 
-# ===== STEP 3 =====
+#converteix coordenades de minuts a decimal
 def ParseCoordinate(coord_str):
-    """Converteix DMS (DDMMSS) a decimal"""
     direction = coord_str[0]
     seconds = float(coord_str[-2:])
     minutes = float(coord_str[-4:-2])
     degrees = float(coord_str[1:-4])
 
     decimal = degrees + minutes / 60 + seconds / 3600
-    if direction == 'S' or direction == 'W':  # Removed 'in' operator
+    if direction == 'S' or direction == 'W':
         decimal = -decimal
     return decimal
 
-
+#carregar aeroports del fitxer airports.txt
 def LoadAirports(airports_file):
-    """Carrega aeroports del fitxer"""
     airports = []
     try:
         with open(airports_file, 'r') as f:
@@ -67,7 +63,6 @@ def LoadAirports(airports_file):
 
 
 def SaveSchengenAirports(airports, filename):
-    """Guarda només els aeroports Schengen"""
     if not airports:
         return -1
 
@@ -79,18 +74,18 @@ def SaveSchengenAirports(airports, filename):
     with open(filename, 'w') as f:
         f.write("CODE LAT LON\n")
         i = 0
-        while i < len(schengen):  # Converted for loop to while
+        while i < len(schengen):
             a = schengen[i]
             f.write(f"{a.icao_code} {a.latitude} {a.longitude}\n")
             i += 1
 
     return len(schengen)
 
-
+#per afegir un aeroport
 def AddAirport(airports, airport):
-    """Afegeix un aeroport a la llista"""
+
     i = 0
-    while i < len(airports):  # Converted for loop to while
+    while i < len(airports):
         a = airports[i]
         if a.icao_code.upper() == airport.icao_code.upper():
             return False
@@ -98,11 +93,10 @@ def AddAirport(airports, airport):
     airports.append(airport)
     return True
 
-
+#elimina aeroport de la llista
 def RemoveAirport(airports, code):
-    """Elimina un aeroport per codi"""
     i = 0
-    while i < len(airports):  # Converted for/enumerate loop to while
+    while i < len(airports):
         a = airports[i]
         if a.icao_code.upper() == code.upper():
             del airports[i]
@@ -110,15 +104,12 @@ def RemoveAirport(airports, code):
         i += 1
     return -1
 
-
-# ===== STEP 5 - =====
+#ploteja aeroports shengen vs no shengen
 def PlotAirports(airports):
-    """Mostra una gràfica de barres Schengen vs No-Schengen"""
     if not airports:
         print(" No hi ha aeroports per mostrar")
         return None, None
 
-    # Comptem
     schengen_count = sum(1 for a in airports if a.schengen)
     non_schengen_count = len(airports) - schengen_count
 
@@ -132,7 +123,7 @@ def PlotAirports(airports):
 
     i = 0
     counts = [schengen_count, non_schengen_count]
-    while i < len(counts):  # Converted for loop to while
+    while i < len(counts):
         v = counts[i]
         ax.text(i, v + 1, str(v), ha='center', fontweight='bold', fontsize=11)
         i += 1
@@ -143,8 +134,8 @@ def PlotAirports(airports):
 import simplekml
 import os
 
+#crear el mapa dels aeroports
 def MapAirports(airports):
-    """Crea un mapa KML per Google Earth (aeroports colorejats)"""
 
     if not airports:
         print("No hi ha aeroports per mostrar")

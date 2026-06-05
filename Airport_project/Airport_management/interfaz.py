@@ -589,6 +589,62 @@ def declare_emergency_flight_window():
     entry_id = tk.Entry(emergency_window, textvariable=id_var, font=("Arial", 11), width=20, justify="center")
     entry_id.pack(pady=10)
 
+    #EXAMEN DE PROYECTO DIFICIL
+
+
+def PROGRAMANUEVO():
+    global merged_aircrafts
+    if not merged_aircrafts:
+        messagebox.showerror("Error", "No hi ha vols disponibles. Fusiona primer.")
+        return
+
+    vols_doshores = []
+    i = 0
+
+    while i < len(merged_aircrafts):
+        vuelo_arribada = merged_aircrafts[i]
+
+        try:
+            if vuelo_arribada.arrival_time:
+                j = 0
+                while j < len(merged_aircrafts):
+                    vuelo_sortida = merged_aircrafts[j]
+
+                    try:
+                        if vuelo_arribada.aircraft_id == vuelo_sortida.aircraft_id and vuelo_sortida.departure_time:
+                            parts_arr = vuelo_arribada.arrival_time.split(":")
+                            minuts_arr = (int(parts_arr[0]) * 60) + int(parts_arr[1])
+
+                            parts_dep = vuelo_sortida.departure_time.split(":")
+                            minuts_dep = (int(parts_dep[0]) * 60) + int(parts_dep[1])
+
+                            temps_estada = minuts_dep - minuts_arr
+
+                            if temps_estada < 0:
+                                temps_estada = temps_estada + 1440
+
+                            if 0 < temps_estada < 120:
+                                dades_vol = {"id": vuelo_arribada.aircraft_id, "arribada": vuelo_arribada.arrival_time, "sortida": vuelo_sortida.departure_time, "temps": temps_estada}
+                                vols_doshores.append(dades_vol)
+                    except ValueError:
+                        messagebox.showerror("Error en los datos")
+                    j += 1
+        except ValueError:
+            messagebox.showerror("Error en los datos")
+        i += 1
+
+    f = open("vols_doshores.txt", "w")
+
+    i = 0
+    while i < len(vols_doshores):
+        v = vols_doshores[i]
+        f.write(v["id"] + " amb arribada a les: " + v["arribada"] + " i sortida a les: " + v["sortida"] + " passarà a terra " + str(
+            v["temps"]) + " min)\n")
+        i = i + 1
+
+    f.close()
+    os.startfile("vols_doshores.txt")
+
     def trigger_emergency_routing():
         global bcn
         target_id = id_var.get().strip().upper()
@@ -792,6 +848,7 @@ extra_frame.grid(row=1, column=0, sticky="ew")
 
 extra_frame.columnconfigure(0, weight=1)
 extra_frame.columnconfigure(1, weight=1)
+extra_frame.columnconfigure(2, weight=1)
 
 btn_emergencia = tk.Button(extra_frame, text="🚨 Declarar Emergència (Forçar Pista)",
                            command=declare_emergency_flight_window, bg="#c0392b", fg="white",
@@ -802,6 +859,11 @@ btn_metar = tk.Button(extra_frame, text="🌤️ Actualitzar METAR LEBL (Temps R
                       command=fetch_live_metar_lebl, bg="#1b3a4b", fg="white", font=("Arial", 10, "bold"),
                       relief="flat")
 btn_metar.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+
+btn_horas = tk.Button(extra_frame, text="¿Cuántos vuelos pasaran?",
+                      command=PROGRAMANUEVO, bg="#1b3a4b", fg="white", font=("Arial", 10, "bold"),
+                      relief="flat")
+btn_horas.grid(row=0, column=2, padx=5, pady=5, sticky="ew")
 
 # === COLUMNA 3 (DRETA) ===
 right_frame = tk.Frame(root, bg=COLOR_FONDO, width=260)
