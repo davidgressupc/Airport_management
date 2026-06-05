@@ -858,4 +858,4 @@ tk.Button(gates_frame_v4, text="Asignar Gates por Hora", command=assign_gates_by
 tk.Button(gates_frame_v4, text="Ocupación Diaria (Gráfica)", command=plot_day_occupancy_action, bg=COLOR_BOTON,
           fg=COLOR_TEXTO, font=("Arial", 10, "bold"), relief="flat").pack(fill="x", padx=5, pady=3)
 
-root.mainloop()º
+root.mainloop()
